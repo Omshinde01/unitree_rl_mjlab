@@ -130,33 +130,7 @@ def unitree_g1_23dof_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     r".*elbow.*": 0.1,
     r".*wrist.*": 0.1,
   }
-  cfg.rewards["jump_takeoff"] = RewardTermCfg(
-  func=mdp.jump_takeoff,
-  weight=2.0,
-  params={
-    "command_name": "twist",
-    "velocity_scale": 1.0,
-  },
-  )
 
-  cfg.rewards["jump_airborne"] = RewardTermCfg(
-    func=mdp.jump_airborne,
-    weight=2.0,
-    params={
-      "command_name": "twist",
-      "sensor_name": "feet_ground_contact",
-    },
-  )
-
-  cfg.rewards["jump_height"] = RewardTermCfg(
-    func=mdp.jump_height,
-    weight=2.0,
-    params={
-      "command_name": "twist",
-      "target_height": 0.95,
-      "height_std": 0.10,
-    },
-  )
   cfg.rewards["body_orientation_l2"].params["asset_cfg"].body_names = ("torso_link",)
   cfg.rewards["body_ang_vel"].params["asset_cfg"].body_names = ("torso_link",)
   cfg.rewards["foot_clearance"].params["asset_cfg"].site_names = site_names
@@ -214,7 +188,33 @@ def unitree_g1_23dof_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
 
   # Disable terrain curriculum (not present in play mode since rough clears all).
   cfg.curriculum.pop("terrain_levels", None)
+  cfg.rewards["jump_takeoff"] = RewardTermCfg(
+  func=mdp.jump_takeoff,
+  weight=2.0,
+  params={
+    "command_name": "twist",
+    "velocity_scale": 1.0,
+  },
+  )
 
+  cfg.rewards["jump_airborne"] = RewardTermCfg(
+    func=mdp.jump_airborne,
+    weight=2.0,
+    params={
+      "command_name": "twist",
+      "sensor_name": "feet_ground_contact",
+    },
+  )
+
+  cfg.rewards["jump_height"] = RewardTermCfg(
+    func=mdp.jump_height,
+    weight=2.0,
+    params={
+      "command_name": "twist",
+      "target_height": 0.95,
+      "height_std": 0.10,
+    },
+  )
   if play:
     twist_cmd = cfg.commands["twist"]
     assert isinstance(twist_cmd, UniformVelocityCommandCfg)
