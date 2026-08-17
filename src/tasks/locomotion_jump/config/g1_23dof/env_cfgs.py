@@ -1,19 +1,21 @@
 """Unitree G1-23DOF velocity environment configurations."""
-
 from src.assets.robots import (
   G1_23DOF_ACTION_SCALE,
   get_g1_23dof_robot_cfg,
 )
+
 from mjlab.envs import ManagerBasedRlEnvCfg
 from mjlab.envs import mdp as envs_mdp
 from mjlab.envs.mdp.actions import JointPositionActionCfg
 from mjlab.managers.event_manager import EventTermCfg
 from mjlab.managers.reward_manager import RewardTermCfg
 from mjlab.sensor import ContactMatch, ContactSensorCfg, RayCastSensorCfg
-from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
+
+import src.tasks.locomotion_jump.mdp as mdp
+
 from src.tasks.locomotion_jump.locomotion_jump_env_cfg import (
-    make_locomotion_jump_env_cfg,
+  make_locomotion_jump_env_cfg,
 )
 
 
