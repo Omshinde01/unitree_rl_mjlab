@@ -355,6 +355,33 @@ def make_locomotion_jump_env_cfg() -> ManagerBasedRlEnvCfg:
         "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
       },
     ),
+    "jump_takeoff": RewardTermCfg(
+      func=mdp.jump_takeoff,
+      weight=2.0,
+      params={
+        "command_name": "twist",
+        "velocity_scale": 1.0,
+      },
+    ),
+
+    "jump_airborne": RewardTermCfg(
+      func=mdp.jump_airborne,
+      weight=2.0,
+      params={
+        "command_name": "twist",
+        "sensor_name": "feet_ground_contact",
+      },
+    ),
+
+    "jump_height": RewardTermCfg(
+      func=mdp.jump_height,
+      weight=2.0,
+      params={
+        "command_name": "twist",
+        "target_height": 0.95,
+        "height_std": 0.10,
+      },
+    ),
   }
 
   ##

@@ -26,19 +26,34 @@ def track_linear_velocity(
   command_name: str,
   asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
 ) -> torch.Tensor:
-  """Reward for tracking the commanded base linear velocity.
+  """Reward commanded XY velocity.
 
-  The commanded z velocity is assumed to be zero.
+  During a jump, vertical velocity is not penalized.
   """
+
   asset: Entity = env.scene[asset_cfg.name]
   command = env.command_manager.get_command(command_name)
-  assert command is not None, f"Command '{command_name}' not found."
-  actual = asset.data.root_link_lin_vel_b
-  xy_error = torch.sum(torch.square(command[:, :2] - actual[:, :2]), dim=1)
-  z_error = torch.square(actual[:, 2])
-  lin_vel_error = xy_error + (2 * z_error)
-  return torch.exp(-lin_vel_error / std**2)
 
+  assert command is not None, f"Command '{command_name}' not found."
+
+  actual = asset.data.root_link_lin_vel_b
+
+  # Normal XY velocity tracking.
+  xy_error = torch.sum(
+    torch.square(command[:, :2] - actual[:, :2]),
+    dim=1,
+  )
+
+  # Fourth command dimension.
+  jump = command[:, 3]
+
+  # Walking: penalize vertical velocity.
+  # Jumping: allow vertical velocity.
+  z_error = torch.square(actual[:, 2]) * (1.0 - jump)
+
+  lin_vel_error = xy_error + z_error
+
+  return torch.exp(-lin_vel_error / std**2)
 
 def track_angular_velocity(
   env: ManagerBasedRlEnv,
@@ -162,54 +177,147 @@ def feet_air_time(
 
 def feet_clearance(
   env: ManagerBasedRlEnv,
+  asset_cfg: SceneEntityCfg,
   target_height: float,
-  command_name: str | None = None,
-  command_threshold: float = 0.1,
-  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+  command_name: str,
+  command_threshold: float,
 ) -> torch.Tensor:
-  """Penalize deviation from target clearance height, weighted by foot velocity."""
+  """Penalize foot clearance error during normal locomotion.
+
+  The reward is disabled during a commanded jump because the normal
+  walking foot-clearance target should not constrain the jump motion.
+  """
+
   asset: Entity = env.scene[asset_cfg.name]
-  foot_z = asset.data.site_pos_w[:, asset_cfg.site_ids, 2]  # [B, N]
-  foot_vel_xy = asset.data.site_lin_vel_w[:, asset_cfg.site_ids, :2]  # [B, N, 2]
-  vel_norm = torch.norm(foot_vel_xy, dim=-1)  # [B, N]
-  delta = torch.abs(foot_z - target_height)  # [B, N]
-  cost = torch.sum(delta * vel_norm, dim=1)  # [B]
+
+  # Foot/site heights relative to the robot/base frame.
+  foot_height = asset.data.site_xpos_w[:, asset_cfg.site_ids, 2]
+
+  # Clearance error.
+  clearance_error = torch.square(
+    foot_height - target_height
+  )
+
+  reward = torch.mean(
+    clearance_error,
+    dim=1,
+  )
+
+  # Activate only for meaningful locomotion commands.
+  command = env.command_manager.get_command(command_name)
+
+  if command is not None:
+    linear_norm = torch.norm(
+      command[:, :2],
+      dim=1,
+    )
+
+    angular_norm = torch.abs(
+      command[:, 2],
+    )
+
+    total_command = linear_norm + angular_norm
+
+    active = (
+      total_command > command_threshold
+    ).float()
+
+    reward *= active
+
+    # Disable walking foot-clearance penalty during jumping.
+    jump = command[:, 3]
+
+    reward *= (1.0 - jump)
+
+  return reward
+def feet_gait(
+  env: ManagerBasedRlEnv,
+  period: float,
+  offset: list[float],
+  threshold: float,
+  command_threshold: float,
+  command_name: str,
+  sensor_name: str,
+) -> torch.Tensor:
+  """Reward matching the desired walking foot-contact gait.
+
+  During normal locomotion:
+    - Expected stance phases are compared with actual foot contacts.
+    - The reward is active only when a meaningful velocity command is present.
+
+  During jumping:
+    - The walking gait reward is disabled because both feet are
+      expected to leave the ground.
+  """
+
+  sensor: ContactSensor = env.scene[sensor_name]
+
+  # Actual foot contact state.
+  is_contact = sensor.data.current_contact_time > 0
+
+  # Compute the global gait phase.
+  global_phase = (
+    (env.episode_length_buf * env.step_dt) / period
+  ).unsqueeze(1)
+
+  # Phase offset for each leg.
+  offsets = torch.as_tensor(
+    offset,
+    device=env.device,
+    dtype=global_phase.dtype,
+  ).view(1, -1)
+
+  # Individual leg phases.
+  leg_phase = (global_phase + offsets) % 1.0
+
+  # Expected stance state.
+  is_stance = leg_phase < threshold
+
+  # Reward correct contact pattern.
+  reward = (
+    (is_stance == is_contact)
+    .float()
+    .mean(dim=1)
+  )
+
+  # Get the command.
   if command_name is not None:
     command = env.command_manager.get_command(command_name)
+
     if command is not None:
-      linear_norm = torch.norm(command[:, :2], dim=1)
-      angular_norm = torch.abs(command[:, 2])
+      # Existing velocity-command activation.
+      linear_norm = torch.norm(
+        command[:, :2],
+        dim=1,
+      )
+
+      angular_norm = torch.abs(
+        command[:, 2],
+      )
+
       total_command = linear_norm + angular_norm
-      active = (total_command > command_threshold).float()
-      cost = cost * active
-  return cost
 
+      # Walking reward is active only when there is
+      # a meaningful velocity command.
+      scale = (
+        total_command > command_threshold
+      ).float()
 
-def feet_gait(
-        env: ManagerBasedRlEnv,
-        period: float,
-        offset: list[float],
-        threshold: float,
-        command_threshold: float,
-        command_name: str,
-        sensor_name: str,
-) -> torch.Tensor:
-    sensor: ContactSensor = env.scene[sensor_name]
-    is_contact = sensor.data.current_contact_time > 0
-    global_phase = ((env.episode_length_buf * env.step_dt) / period).unsqueeze(1)
-    offsets = torch.as_tensor(offset, device=env.device, dtype=global_phase.dtype).view(1, -1)
-    leg_phase = (global_phase + offsets) % 1.0
-    is_stance = (leg_phase < threshold)
-    reward = (is_stance == is_contact).float().mean(dim=1)
-    if command_name is not None:
-        command = env.command_manager.get_command(command_name)
-        if command is not None:
-            linear_norm = torch.norm(command[:, :2], dim=1)
-            angular_norm = torch.abs(command[:, 2])
-            total_command = linear_norm + angular_norm
-            scale = (total_command > command_threshold).float()
-            reward *= scale
-    return reward
+      reward *= scale
+
+      # Fourth command dimension:
+      #
+      # command[:, 3] =
+      #   0 -> walking
+      #   1 -> jumping
+      #
+      # During jumping, the walking gait reward
+      # must not fight the jump behavior.
+      jump = command[:, 3]
+
+      reward *= (1.0 - jump)
+
+  return reward
 
 
 class feet_swing_height:
@@ -426,3 +534,75 @@ def stand_still(
             reward *= scale
     return reward
 
+def jump_takeoff(
+  env: ManagerBasedRlEnv,
+  command_name: str,
+  velocity_scale: float = 1.0,
+) -> torch.Tensor:
+  """Reward upward base velocity when a jump is commanded."""
+
+  command = env.command_manager.get_command(command_name)
+  assert command is not None, f"Command '{command_name}' not found."
+
+  asset = env.scene["robot"]
+
+  # Fourth command dimension.
+  jump = command[:, 3]
+
+  # Base vertical velocity in the robot/world frame.
+  vertical_velocity = asset.data.root_link_lin_vel_w[:, 2]
+
+  # Only reward upward motion.
+  upward_velocity = torch.clamp(vertical_velocity, min=0.0)
+
+  return jump * upward_velocity * velocity_scale
+
+
+def jump_airborne(
+  env: ManagerBasedRlEnv,
+  command_name: str,
+  sensor_name: str,
+) -> torch.Tensor:
+  """Reward both feet being airborne during a commanded jump."""
+
+  command = env.command_manager.get_command(command_name)
+  assert command is not None, f"Command '{command_name}' not found."
+
+  jump = command[:, 3]
+
+  sensor = env.scene[sensor_name]
+
+  # Contact state for the two ankle/foot contacts.
+  contact = sensor.data.current_contact_time > 0
+
+  # Both feet must be airborne.
+  airborne = (~contact).all(dim=1).float()
+
+  return jump * airborne
+
+
+def jump_height(
+  env: ManagerBasedRlEnv,
+  command_name: str,
+  target_height: float,
+  height_std: float,
+) -> torch.Tensor:
+  """Reward the robot for reaching the desired torso height during a jump."""
+
+  command = env.command_manager.get_command(command_name)
+  assert command is not None, f"Command '{command_name}' not found."
+
+  jump = command[:, 3]
+
+  asset = env.scene["robot"]
+
+  # Torso/root height in world coordinates.
+  height = asset.data.root_link_pos_w[:, 2]
+
+  height_error = torch.square(height - target_height)
+
+  reward = torch.exp(
+    -height_error / (height_std ** 2)
+  )
+
+  return jump * reward
