@@ -24,7 +24,9 @@ from mjlab.scene import SceneCfg
 from mjlab.sensor import GridPatternCfg, ObjRef, RayCastSensorCfg
 from mjlab.sim import MujocoCfg, SimulationCfg
 from mjlab.tasks.velocity import mdp
-from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
+from src.tasks.locomotion_jump.mdp.jump_command import (
+  JumpVelocityCommandCfg,
+)
 from mjlab.terrains import TerrainEntityCfg
 from mjlab.terrains.config import ROUGH_TERRAINS_CFG
 from mjlab.utils.noise import UniformNoiseCfg as Unoise
@@ -163,18 +165,20 @@ def make_locomotion_jump_env_cfg() -> ManagerBasedRlEnvCfg:
   ##
 
   commands: dict[str, CommandTermCfg] = {
-    "twist": UniformVelocityCommandCfg(
+    "twist": JumpVelocityCommandCfg(
       entity_name="robot",
       resampling_time_range=(3.0, 8.0),
       rel_standing_envs=0.05,
       heading_command=True,
       heading_control_stiffness=0.5,
+      jump_probability=0.2,
       debug_vis=True,
-      ranges=UniformVelocityCommandCfg.Ranges(
+      ranges=JumpVelocityCommandCfg.Ranges(
         lin_vel_x=(-1.0, 2.0),
         lin_vel_y=(-1.0, 1.0),
         ang_vel_z=(-1.0, 1.0),
         heading=(-math.pi, math.pi),
+        
       ),
     )
   }
