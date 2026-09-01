@@ -148,9 +148,9 @@ def tiangong_rough_env_cfg(
     # Do not add wrist_pitch joints: those joints were removed from the
     # Tiangong MJCF.
 
-    # joint_pos_action.actuator_names = (".*",)
-    # joint_pos_action.use_default_offset = True
-    # joint_pos_action.scale = 0.25
+    joint_pos_action.actuator_names = (".*",)
+    joint_pos_action.use_default_offset = True
+    joint_pos_action.scale = TIENKUNG_PRO_ACTION_SCALE
 
     # ========================================================================
     # Viewer
