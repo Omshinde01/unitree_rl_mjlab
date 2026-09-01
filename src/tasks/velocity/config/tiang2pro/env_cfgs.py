@@ -305,6 +305,7 @@ def tiangong_rough_env_cfg(
         },
     )
     cfg.rewards["track_linear_velocity"].weight = 1.5
+    cfg.rewards["action_rate_l2"].weight = -0.25
     # ========================================================================
     # Play mode
     # ========================================================================
