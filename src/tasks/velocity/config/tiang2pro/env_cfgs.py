@@ -304,7 +304,7 @@ def tiangong_rough_env_cfg(
             "force_threshold": 10.0,
         },
     )
-    cfg.rewards["track_linear_velocity"].weight = 1.5
+    # cfg.rewards["track_linear_velocity"].weight = 1.5
     cfg.rewards["action_rate_l2"].weight = -0.025
     # ========================================================================
     # Play mode
