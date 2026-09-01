@@ -1,3 +1,7 @@
+from .tiangong2pro.tiangong_constants import (
+    get_tienkung_pro_robot_cfg as get_tienkung_pro_robot_cfg,
+)
+
 from .unitree_go2.go2_constants import (
   get_go2_robot_cfg as get_go2_robot_cfg,
 )
