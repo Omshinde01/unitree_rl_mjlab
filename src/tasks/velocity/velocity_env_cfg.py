@@ -262,12 +262,12 @@ def make_velocity_env_cfg() -> ManagerBasedRlEnvCfg:
     "track_linear_velocity": RewardTermCfg(
       func=mdp.track_linear_velocity,
       weight=1.0,
-      params={"command_name": "twist", "std": math.sqrt(0.25)},
+      params={"command_name": "twist", "std": math.sqrt(0.5)}, #STD: 0.5 
     ),
     "track_angular_velocity": RewardTermCfg(
       func=mdp.track_angular_velocity,
       weight=1.0,
-      params={"command_name": "twist", "std": math.sqrt(0.5)},
+      params={"command_name": "twist", "std": math.sqrt(0.25)}, #STD: 0.707
     ),
     "body_orientation_l2": RewardTermCfg(
       func=mdp.body_orientation_l2,
