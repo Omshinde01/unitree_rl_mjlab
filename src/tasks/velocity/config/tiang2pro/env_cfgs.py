@@ -9,7 +9,7 @@ from mjlab.sensor import ContactMatch, ContactSensorCfg, RayCastSensorCfg
 from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
 
-from src.assets.robots import get_tienkung_pro_robot_cfg
+from src.assets.robots import get_tienkung_pro_robot_cfg , TIENKUNG_PRO_ACTION_SCALE
 from src.tasks.velocity.velocity_env_cfg import make_velocity_env_cfg
 
 
@@ -26,7 +26,7 @@ def tiangong_rough_env_cfg(
 
     cfg.sim.mujoco.ccd_iterations = 500
     cfg.sim.contact_sensor_maxmatch = 500
-    cfg.sim.nconmax = 128
+    cfg.sim.nconmax = 48
 
     # ========================================================================
     # Robot
@@ -148,9 +148,9 @@ def tiangong_rough_env_cfg(
     # Do not add wrist_pitch joints: those joints were removed from the
     # Tiangong MJCF.
 
-    joint_pos_action.actuator_names = (".*",)
-    joint_pos_action.use_default_offset = True
-    joint_pos_action.scale = 0.25
+    # joint_pos_action.actuator_names = (".*",)
+    # joint_pos_action.use_default_offset = True
+    # joint_pos_action.scale = 0.25
 
     # ========================================================================
     # Viewer
@@ -169,7 +169,7 @@ def tiangong_rough_env_cfg(
         UniformVelocityCommandCfg,
     )
 
-    twist_cmd.viz.z_offset = 1.0
+    twist_cmd.viz.z_offset = 1.15
 
     # ========================================================================
     # Critic: foot height
@@ -409,8 +409,8 @@ def tiangong_flat_env_cfg(
         )
 
         twist_cmd.ranges.lin_vel_x = (
-            -1.0,
-            2.0,
+            -0.5,
+            1.0,
         )
 
         twist_cmd.ranges.lin_vel_y = (

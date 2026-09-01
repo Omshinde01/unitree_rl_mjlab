@@ -316,7 +316,7 @@ TIENKUNG_PRO_ACTUATOR_WRIST_ROLL = BuiltinPositionActuatorCfg(
 # Keyframe Configuration
 # ============================================================================
 HOME_KEYFRAME = EntityCfg.InitialStateCfg(
-    pos=(0.0, 0.0, 0.94),
+    pos=(0.0, 0.0, 1.03),
     joint_pos={
         # --------------------------------------------------------------------
         # Left leg (Unchanged)
@@ -341,20 +341,20 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
         # --------------------------------------------------------------------
         # Left arm
         # --------------------------------------------------------------------
-        "shoulder_pitch_l_joint": -0.20,  # Negative sign rotates arm forward/downward
-        "shoulder_roll_l_joint": 0.15,   # Clears upper arm from torso
+        "shoulder_pitch_l_joint": -0.10,  # Negative sign rotates arm forward/downward
+        "shoulder_roll_l_joint": 0.10,   # Clears upper arm from torso
         "shoulder_yaw_l_joint": 0.0,
-        "elbow_pitch_l_joint": -0.20,    # Negative sign flexes elbow forward (~34 deg)
+        "elbow_pitch_l_joint": -0.10,    # Negative sign flexes elbow forward (~34 deg)
         "elbow_yaw_l_joint": 0.0,
         "wrist_roll_l_joint": 0.0,
 
         # --------------------------------------------------------------------
         # Right arm
         # --------------------------------------------------------------------
-        "shoulder_pitch_r_joint": -0.20,  # Negative sign rotates arm forward/downward
-        "shoulder_roll_r_joint": -0.15,  # Clears upper arm from torso
+        "shoulder_pitch_r_joint": -0.10,  # Negative sign rotates arm forward/downward
+        "shoulder_roll_r_joint": -0.10,  # Clears upper arm from torso
         "shoulder_yaw_r_joint": 0.0,
-        "elbow_pitch_r_joint": -0.20,    # Negative sign flexes elbow forward (~34 deg)
+        "elbow_pitch_r_joint": -0.10,    # Negative sign flexes elbow forward (~34 deg)
         "elbow_yaw_r_joint": 0.0,
         "wrist_roll_r_joint": 0.0,
 

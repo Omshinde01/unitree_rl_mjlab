@@ -1,5 +1,6 @@
 from .tiangong2pro.tiangong_constants import (
     get_tienkung_pro_robot_cfg as get_tienkung_pro_robot_cfg,
+    TIENKUNG_PRO_ACTION_SCALE as TIENKUNG_PRO_ACTION_SCALE,
 )
 
 from .unitree_go2.go2_constants import (
