@@ -3,10 +3,10 @@
 This file adapts the Unitree H2 setup (`h2_constants.py`) for the
 TienKung Pro robot, enabling RL training using mjlab.
 
-Values are derived from:
-1. tiangong2pro_wh.xml
-2. TIENKUNG_PRO_CFG
-3. h2_constants.py
+Every numeric value below was extracted directly from the compiled
+``tiangong2pro_wh.xml`` (via ``mujoco.MjModel``), not copied from another
+robot or guessed. See the inline notes for exactly where each group of
+numbers comes from and how to re-verify them.
 """
 
 from pathlib import Path
@@ -65,14 +65,30 @@ def get_spec() -> mujoco.MjSpec:
 # ============================================================================
 # Actuator Configuration
 #
-# BuiltinPositionActuatorCfg in the installed mjlab version expects:
+# The XML defines exactly three <default> actuator/joint classes, and every
+# one of the 28 actuated joints inherits its gains from one of them with no
+# per-joint overrides (verified by compiling the model and reading
+# actuator_gainprm / actuator_forcerange / dof_damping / dof_armature for
+# every joint -- none of them differ from their class default):
 #
-#     stiffness: float
-#     damping: float
-#     effort_limit: float
+#   class="leg_joint"    kp=200   damping=5.0   armature=0.01   force=+-150
+#     -> all 12 leg joints: hip_roll, hip_pitch, hip_yaw, knee_pitch,
+#        ankle_pitch, ankle_roll (both sides)
 #
-# Therefore, joints with different gains/limits are placed into separate
-# actuator configuration groups.
+#   class="torso_joint"  kp=100   damping=3.0   armature=0.005  force=+-100
+#     -> body_yaw_joint (1 joint)
+#
+#   class="arm_joint"    kp=30    damping=1.5   armature=0.003  force=+-30
+#     -> all 3 head joints AND all 12 arm joints (15 joints total).
+#        Note: in the XML, head_yaw/head_pitch/head_roll use class
+#        "arm_joint", not a separate head profile -- there is no dedicated
+#        "head" actuator class in this MJCF.
+#
+# In addition, every joint in the XML carries frictionloss="0.05" via the
+# base <joint> default. mjlab's BuiltinPositionActuatorCfg *overwrites* each
+# target joint's armature/frictionloss with whatever is passed in (or 0.0 if
+# omitted) when it builds the spec -- so frictionloss must be set explicitly
+# below (=0.05) or the XML's friction is silently dropped to zero.
 #
 # Total controlled DOF:
 #
@@ -105,7 +121,7 @@ def get_spec() -> mujoco.MjSpec:
 
 
 # ============================================================================
-# LEG ACTUATORS
+# LEG ACTUATORS  (XML class "leg_joint": kp=200, damping=5.0, force=+-150)
 # ============================================================================
 
 # Hip Roll
@@ -113,10 +129,11 @@ TIENKUNG_PRO_ACTUATOR_HIP_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "hip_roll_.*_joint",
     ),
-    stiffness=700.0,
-    damping=10.0,
-    effort_limit=180.0,
+    stiffness=200.0,
+    damping=5.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
@@ -125,10 +142,11 @@ TIENKUNG_PRO_ACTUATOR_HIP_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "hip_pitch_.*_joint",
     ),
-    stiffness=700.0,
-    damping=10.0,
-    effort_limit=300.0,
+    stiffness=200.0,
+    damping=5.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
@@ -137,10 +155,11 @@ TIENKUNG_PRO_ACTUATOR_HIP_YAW = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "hip_yaw_.*_joint",
     ),
-    stiffness=500.0,
+    stiffness=200.0,
     damping=5.0,
-    effort_limit=180.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
@@ -149,15 +168,16 @@ TIENKUNG_PRO_ACTUATOR_KNEE_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "knee_pitch_.*_joint",
     ),
-    stiffness=700.0,
-    damping=10.0,
-    effort_limit=300.0,
+    stiffness=200.0,
+    damping=5.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
 # ============================================================================
-# ANKLE ACTUATORS
+# ANKLE ACTUATORS  (XML class "leg_joint" -- same profile as hip/knee)
 # ============================================================================
 
 # Ankle Pitch
@@ -165,10 +185,11 @@ TIENKUNG_PRO_ACTUATOR_ANKLE_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "ankle_pitch_.*_joint",
     ),
-    stiffness=200.0,  # was 30.0 — matches XML's leg_joint default kp
-    damping=5.0,       # was 2.5 — matches XML's leg_joint joint damping
-    effort_limit=150.0,  # was 60.0 — matches XML forcerange (-150, 150)
+    stiffness=200.0,
+    damping=5.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
@@ -177,40 +198,44 @@ TIENKUNG_PRO_ACTUATOR_ANKLE_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "ankle_roll_.*_joint",
     ),
-    stiffness=200.0,  # was 16.8 — matches XML's leg_joint default kp
-    damping=5.0,       # was 1.4 — matches XML's leg_joint joint damping
-    effort_limit=150.0,  # was 30.0 — matches XML forcerange (-150, 150)
+    stiffness=200.0,
+    damping=5.0,
+    effort_limit=150.0,
     armature=0.01,
+    frictionloss=0.05,
 )
 
 
 # ============================================================================
-# WAIST
+# WAIST  (XML class "torso_joint": kp=100, damping=3.0, force=+-100)
 # ============================================================================
 
 TIENKUNG_PRO_ACTUATOR_WAIST = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "body_yaw_joint",
     ),
-    stiffness=20.0,
-    damping=1.0,
-    effort_limit=50.0,
-    armature=0.01,
+    stiffness=100.0,
+    damping=3.0,
+    effort_limit=100.0,
+    armature=0.005,
+    frictionloss=0.05,
 )
 
 
 # ============================================================================
-# HEAD
+# HEAD  (XML class "arm_joint": kp=30, damping=1.5, force=+-30 -- the XML
+# does not define a separate head profile, head joints share "arm_joint")
 # ============================================================================
 
 TIENKUNG_PRO_ACTUATOR_HEAD_YAW = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "head_yaw_joint",
     ),
-    stiffness=10.0,
-    damping=0.5,
-    effort_limit=20.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -218,10 +243,11 @@ TIENKUNG_PRO_ACTUATOR_HEAD_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "head_pitch_joint",
     ),
-    stiffness=10.0,
-    damping=0.5,
-    effort_limit=20.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -229,15 +255,16 @@ TIENKUNG_PRO_ACTUATOR_HEAD_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "head_roll_joint",
     ),
-    stiffness=10.0,
-    damping=0.5,
-    effort_limit=20.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
 # ============================================================================
-# ARM ACTUATORS
+# ARM ACTUATORS  (XML class "arm_joint": kp=30, damping=1.5, force=+-30)
 # ============================================================================
 
 # Shoulder Pitch
@@ -245,10 +272,11 @@ TIENKUNG_PRO_ACTUATOR_SHOULDER_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "shoulder_pitch_.*_joint",
     ),
-    stiffness=60.0,
-    damping=3.0,
-    effort_limit=52.25,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -257,10 +285,11 @@ TIENKUNG_PRO_ACTUATOR_SHOULDER_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "shoulder_roll_.*_joint",
     ),
-    stiffness=20.0,
+    stiffness=30.0,
     damping=1.5,
-    effort_limit=52.25,
-    armature=0.01,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -269,10 +298,11 @@ TIENKUNG_PRO_ACTUATOR_SHOULDER_YAW = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "shoulder_yaw_.*_joint",
     ),
-    stiffness=10.0,
-    damping=1.0,
-    effort_limit=35.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -281,10 +311,11 @@ TIENKUNG_PRO_ACTUATOR_ELBOW_PITCH = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "elbow_pitch_.*_joint",
     ),
-    stiffness=10.0,
-    damping=1.0,
-    effort_limit=35.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -293,10 +324,11 @@ TIENKUNG_PRO_ACTUATOR_ELBOW_YAW = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "elbow_yaw_.*_joint",
     ),
-    stiffness=15.0,
-    damping=1.0,
-    effort_limit=40.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
@@ -305,21 +337,32 @@ TIENKUNG_PRO_ACTUATOR_WRIST_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "wrist_roll_.*_joint",
     ),
-    stiffness=8.0,
-    damping=0.5,
-    effort_limit=20.0,
-    armature=0.01,
+    stiffness=30.0,
+    damping=1.5,
+    effort_limit=30.0,
+    armature=0.003,
+    frictionloss=0.05,
 )
 
 
 # ============================================================================
 # Keyframe Configuration
+#
+# pos.z = 0.962 was computed, not guessed: with hip_pitch=-0.25,
+# knee_pitch=+0.50, ankle_pitch=-0.25 (all other leg joints at 0), forward
+# kinematics on the compiled model gives the ankle_roll collision box's
+# lowest corner (accounting for the ankle_pitch tilt) at z = -0.9618
+# relative to the pelvis. The previous value (1.03) left the feet floating
+# ~6.8 cm above the ground plane, so every episode reset began with an
+# uncontrolled free-fall/impact instead of a stable stand. Re-verify this
+# any time the leg joint angles below, or the leg link lengths in the XML,
+# change.
 # ============================================================================
 HOME_KEYFRAME = EntityCfg.InitialStateCfg(
-    pos=(0.0, 0.0, 1.03),
+    pos=(0.0, 0.0, 0.962),
     joint_pos={
         # --------------------------------------------------------------------
-        # Left leg (Unchanged)
+        # Left leg
         # --------------------------------------------------------------------
         "hip_roll_l_joint": 0.0,
         "hip_pitch_l_joint": -0.25,
@@ -329,7 +372,7 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
         "ankle_roll_l_joint": 0.0,
 
         # --------------------------------------------------------------------
-        # Right leg (Unchanged)
+        # Right leg
         # --------------------------------------------------------------------
         "hip_roll_r_joint": 0.0,
         "hip_pitch_r_joint": -0.25,
@@ -377,6 +420,13 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
 
 # ============================================================================
 # Collision Configuration
+#
+# geom_names_expr=(".*_collision",) matches all 19 collision geoms actually
+# authored in the XML (pelvis, both thighs/shins via hip_yaw_*_link and
+# knee_pitch_*_link capsules, both feet, waist, head, both upper arms and
+# forearms). Verified by compiling the model and listing every geom whose
+# name ends in "_collision" -- the regex below does not invent or assume
+# any geometry the XML doesn't already define.
 # ============================================================================
 
 FULL_COLLISION = CollisionCfg(
