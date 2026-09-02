@@ -164,6 +164,7 @@
                   <joint name="ankle_roll_l_joint" axis="1 0 0" range="-0.523599 0.523599" class="leg_joint"/>
                   <geom class="visual" type="mesh" mesh="ankle_roll_l_link"/>
                   <geom name="ankle_roll_l_link_collision" class="collision" type="box" size="0.11 0.045 0.02" pos="0.03 0 -0.035"/>
+                  <site name="left_foot" rgba="1 0 0 1" pos="0.03 0 -0.055"/>
                 </body>
               </body>
             </body>
@@ -200,6 +201,7 @@
                   <joint name="ankle_roll_r_joint" axis="1 0 0" range="-0.523599 0.523599" class="leg_joint"/>
                   <geom class="visual" type="mesh" mesh="ankle_roll_r_link"/>
                   <geom name="ankle_roll_r_link_collision" class="collision" type="box" size="0.11 0.045 0.02" pos="0.03 0 -0.035"/>
+                  <site name="right_foot" rgba="1 0 0 1" pos="0.03 0 -0.055"/>
                 </body>
               </body>
             </body>

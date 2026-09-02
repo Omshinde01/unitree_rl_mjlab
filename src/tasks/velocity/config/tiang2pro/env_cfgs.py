@@ -49,9 +49,17 @@ def tiangong_rough_env_cfg(
     # Foot configuration
     # ========================================================================
 
-    foot_body_names = (
-        "ankle_roll_l_link",
-        "ankle_roll_r_link",
+    # NOTE: "left_foot"/"right_foot" are <site> elements added to
+    # tiangong2pro_wh.xml inside the ankle_roll_l_link / ankle_roll_r_link
+    # bodies. mjlab's foot_height / feet_clearance / feet_slip terms read
+    # asset_cfg.site_ids directly (site_pos_w / site_lin_vel_w) -- they do
+    # NOT fall back to body_names. Without these sites, site_names=None
+    # resolves to slice(None), i.e. *every* site on the robot (in practice
+    # just imu_site), silently pointing the reward/observation at the IMU
+    # instead of the feet. Do not switch these back to body_names.
+    foot_site_names = (
+        "left_foot",
+        "right_foot",
     )
 
     foot_geom_names = (
@@ -177,11 +185,7 @@ def tiangong_rough_env_cfg(
 
     cfg.observations["critic"].terms[
         "foot_height"
-    ].params["asset_cfg"].site_names = None
-
-    cfg.observations["critic"].terms[
-        "foot_height"
-    ].params["asset_cfg"].body_names = foot_body_names
+    ].params["asset_cfg"].site_names = foot_site_names
 
     # ========================================================================
     # Randomization
@@ -278,19 +282,11 @@ def tiangong_rough_env_cfg(
 
     cfg.rewards[
         "foot_clearance"
-    ].params["asset_cfg"].site_names = None
-
-    cfg.rewards[
-        "foot_clearance"
-    ].params["asset_cfg"].body_names = foot_body_names
+    ].params["asset_cfg"].site_names = foot_site_names
 
     cfg.rewards[
         "foot_slip"
-    ].params["asset_cfg"].site_names = None
-
-    cfg.rewards[
-        "foot_slip"
-    ].params["asset_cfg"].body_names = foot_body_names
+    ].params["asset_cfg"].site_names = foot_site_names
 
     # ========================================================================
     # Self-collision reward
