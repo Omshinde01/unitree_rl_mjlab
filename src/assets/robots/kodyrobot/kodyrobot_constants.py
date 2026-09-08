@@ -336,7 +336,6 @@ KODYROBOT_ACTUATOR_ELBOW_YAW = BuiltinPositionActuatorCfg(
 KODYROBOT_ACTUATOR_WRIST_ROLL = BuiltinPositionActuatorCfg(
     target_names_expr=(
         "wrist_roll_.*_joint",
-        "wrist_pitch_.*_joint",
     ),
     stiffness=30.0,
     damping=1.5,
