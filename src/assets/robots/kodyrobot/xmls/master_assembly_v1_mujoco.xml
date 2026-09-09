@@ -119,7 +119,7 @@
                     <joint name="ankle_roll_l_joint" axis="1 0 0" range="-0.523598775598 0.523598775598" class="leg_joint"/>
                     <inertial pos="-0.0166451223669 -2.21116147037e-06 0.0334209601791" mass="1.017381" fullinertia="0.000821804987817 0.00378891492141 0.00420924923963 -1.2607031151e-07 -0.000279395698577 -5.6300087608e-09"/>
                     <geom class="visual" type="mesh" mesh="LL_foot_roll_link"/>
-                    <geom class="collision" type="mesh" mesh="LL_foot_roll_link"/>
+                    <geom name="LL_foot_roll_link_collision" class="collision" type="mesh" mesh="LL_foot_roll_link"/>
                     <site name="left_foot" pos="0 0 -0.055" size="0.015"/>
                   </body>
                 </body>
@@ -156,7 +156,7 @@
                     <joint name="ankle_roll_r_joint" axis="-1 0 0" range="-0.523598775598 0.523598775598" class="leg_joint"/>
                     <inertial pos="-0.0080451223649 -2.21116577825e-06 0.033137569353" mass="1.017381" fullinertia="0.000821804988022 0.00378891492238 0.00420924924073 -1.2607022955e-07 -0.00027939569868 -5.63001948114e-09"/>
                     <geom class="visual" type="mesh" mesh="RL_foot_roll_link"/>
-                    <geom class="collision" type="mesh" mesh="RL_foot_roll_link"/>
+                    <geom name="RL_foot_roll_link_collision" class="collision" type="mesh" mesh="RL_foot_roll_link"/>
                     <site name="right_foot" pos="0 0 -0.055" size="0.015"/>
                   </body>
                 </body>

@@ -63,8 +63,8 @@ def kodyrobot_rough_env_cfg(
     )
 
     foot_geom_names = (
-        "LL_foot_roll_link",
-        "RL_foot_roll_link",
+        "LL_foot_roll_link_collision",
+        "RL_foot_roll_link_collision",
     )
 
     # ========================================================================
