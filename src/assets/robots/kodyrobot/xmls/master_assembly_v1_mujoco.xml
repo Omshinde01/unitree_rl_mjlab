@@ -244,7 +244,11 @@
                     <geom class="visual" type="mesh" mesh="RA_link_7"/>
                     <geom class="collision" type="mesh" mesh="RA_link_7"/>
                     <body name="RA_hand_link">
-                      <inertial pos="0.00230029872483 -0.834521238845 -0.233154756004" mass="0.218186" fullinertia="0.000121026998877 7.4079806205e-05 7.38692511136e-05 -1.09082519106e-06 -6.7187382523e-07 -3.97041498983e-06"/>
+                      <!-- FIXED: original export had COM 0.87 m from the joint (impossible for a
+                           hand-sized part). RA_hand_link and LA_hand_link share identical mass
+                           (0.218186 kg), confirming mirrored parts, so LA_hand_link's inertial
+                           data is reused here pending a corrected CAD export. -->
+                      <inertial pos="0.00738559093641 -0.00692014278414 -0.0832813985632" mass="0.218186" fullinertia="8.4870528266e-05 0.000110233286777 7.38683159898e-05 1.97826773767e-05 3.77445616584e-06 -1.4033505617e-06"/>
                       <geom class="visual" type="mesh" mesh="RA_hand_link"/>
                     </body>
                   </body>
@@ -301,7 +305,10 @@
         </body>
       </body>
       <body name="lower_chest_camera" pos="0.09193 -0.001848 0.050311" quat="-3.24305304747e-06 0.88289462641 -1.72483119828e-06 -0.46957116462">
-        <inertial pos="-0.0198652531357 -0.00144159144469 0.105861879753" mass="0.1" fullinertia="0.148770002689 0.24607721887 0.22989743226 0.000543088071719 -0.111351852126 0.000103657530275"/>
+        <!-- FIXED: original inertia implied a ~1.75 m gyration radius for a 0.1 kg camera
+             (~1000x too large) - would corrupt this fixed body's contribution once welded
+             to base_link. Reusing upper_chest_front_camera's sane tensor (same mass/part). -->
+        <inertial pos="-0.0198652531357 -0.00144159144469 0.105861879753" mass="0.1" fullinertia="0.000127877803595 5.3136202818e-06 0.000122845570494 -4.03090959719e-08 -2.61129633763e-07 -9.74770259931e-08"/>
         <geom class="visual" type="mesh" mesh="lower_chest_camera"/>
       </body>
       <body name="upper_chest_front_camera" pos="0.07785 -0.0020955 0.43957" quat="-3.67320510335e-06 0.999999999993 0 -0">
@@ -309,7 +316,9 @@
         <geom class="visual" type="mesh" mesh="upper_chest_front_camera"/>
       </body>
       <body name="upper_chest_rear_camera" pos="-0.11897 0.0010955 0.32728" quat="-3.24325138161e-06 -0.469469628633 -1.72445823577e-06 0.882948621256">
-        <inertial pos="0.20238068599 0.00150190035234 -0.271624001811" mass="0.1" fullinertia="0.141113149959 0.24607721887 0.237554284989 0.000299657323984 0.108256301422 -0.000464645053075"/>
+        <!-- FIXED: same bug class as lower_chest_camera - implied gyration radius far
+             too large for a 0.1 kg part. Reusing upper_chest_front_camera's sane tensor. -->
+        <inertial pos="0.20238068599 0.00150190035234 -0.271624001811" mass="0.1" fullinertia="0.000127877803595 5.3136202818e-06 0.000122845570494 -4.03090959719e-08 -2.61129633763e-07 -9.74770259931e-08"/>
         <geom class="visual" type="mesh" mesh="upper_chest_rear_camera"/>
       </body>
     </body>
