@@ -36,6 +36,38 @@ KODYROBOT_XML: Path = (
 assert KODYROBOT_XML.exists()
 
 
+# ============================================================================
+# XML invariants -- do not reintroduce these when regenerating the MJCF.
+#
+# 1. No <actuator> block. Actuators are added exclusively below via
+#    KODYROBOT_ARTICULATION / BuiltinPositionActuatorCfg.edit_spec(), which
+#    always *adds* a new <position> actuator regardless of what the spec
+#    already contains (mjlab.entity.Entity._add_actuators() does not check
+#    for or dedupe existing actuators). A baked-in <actuator> block would
+#    silently double-actuate every joint: one PD servo driven by the RL
+#    policy's ctrl, plus a second, uncommanded one left parked at whatever
+#    the init keyframe set, fighting the policy for the entire episode.
+# 2. No <light>/floor <geom>/skybox/groundplane assets. mjlab's terrain
+#    system (cfg.scene.terrain) supplies the ground plane when this spec is
+#    attached into a scene; a robot-local floor geom would sit exactly
+#    coincident with it in every environment, causing duplicate/unstable
+#    ground contacts.
+# 3. No <option>/<size> block. Simulation options are owned by env_cfgs.py's
+#    `cfg.sim.*` once this spec is attached into a scene -- values set here
+#    are compile-time only and silently ignored by the training pipeline.
+# 4. Every <geom class="collision"> must carry an explicit
+#    name="<link>_collision". CollisionCfg.edit_spec() (see FULL_COLLISION
+#    below) matches geoms by their literal .name against ".*_collision" --
+#    an unnamed geom has name == "", and since disable_other_geoms=True
+#    collapses all such empty names into a single set entry, only one
+#    arbitrary geom would ever get explicitly disabled while the rest
+#    silently keep the XML's raw <default> contype/conaffinity/friction
+#    instead of the tuned collision profile. All 31 mesh collision geoms
+#    (base_link, hip_link, both legs, both arms, head; hands and IMU/camera
+#    mounts have no collision geom by design) are named this way.
+# ============================================================================
+
+
 def get_assets(meshdir: str) -> dict[str, bytes]:
     """Load mesh assets relative to the XML folder."""
 
@@ -420,12 +452,16 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
 # ============================================================================
 # Collision Configuration
 #
-# geom_names_expr=(".*_collision",) matches all 19 collision geoms actually
-# authored in the XML (pelvis, both thighs/shins via hip_yaw_*_link and
-# knee_pitch_*_link capsules, both feet, waist, head, both upper arms and
-# forearms). Verified by compiling the model and listing every geom whose
-# name ends in "_collision" -- the regex below does not invent or assume
-# any geometry the XML doesn't already define.
+# geom_names_expr=(".*_collision",) matches all 31 collision geoms authored
+# in the XML: base_link, hip_link, every leg link (LL/RL_link_1..4,
+# LL/RL_foot_pitch_link, LL/RL_foot_roll_link), every head link
+# (head_link_1..3), and every arm link (RA/LA_link_1..7). Each carries an
+# explicit name="<link>_collision" for exactly this purpose -- see the "XML
+# invariants" note above KODYROBOT_XML. Hands (RA/LA_hand_link) and the
+# IMU/camera mount bodies have no collision geom by design (visual only).
+# Verified by compiling the model and listing every geom whose name ends in
+# "_collision" -- the regex below does not invent or assume any geometry the
+# XML doesn't already define.
 # ============================================================================
 
 FULL_COLLISION = CollisionCfg(
