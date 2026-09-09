@@ -355,7 +355,7 @@ def kodyrobot_flat_env_cfg(
     # Flat simulation
     # ========================================================================
 
-    cfg.sim.njmax = 300
+    cfg.sim.njmax = 512
     cfg.sim.mujoco.ccd_iterations = 50
     cfg.sim.contact_sensor_maxmatch = 64
     cfg.sim.nconmax = None
