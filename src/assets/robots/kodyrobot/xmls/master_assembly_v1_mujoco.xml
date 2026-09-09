@@ -447,7 +447,4 @@
     <exclude body1="base_link" body2="head_link_1"/>
     <exclude body1="head_link_3" body2="head_camera"/>
   </contact>
-  <keyframe>
-    <key name="home" qpos="0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/>
-  </keyframe>
 </mujoco>
