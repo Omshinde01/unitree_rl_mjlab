@@ -320,6 +320,7 @@
     <gyro name="imu_ang_vel" site="imu_site"/>
     <velocimeter name="imu_lin_vel" site="imu_site"/>
     <accelerometer name="imu_lin_acc" site="imu_site"/>
+    <subtreeangmom name="root_angmom" body="base_link"/>
   </sensor>
   <contact>
     <exclude body1="hip_link" body2="LL_link_1"/>
@@ -356,7 +357,4 @@
     <exclude body1="base_link" body2="head_link_1"/>
     <exclude body1="head_link_3" body2="head_camera"/>
   </contact>
-  <keyframe>
-    <key name="home" qpos="0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/>
-  </keyframe>
 </mujoco>
