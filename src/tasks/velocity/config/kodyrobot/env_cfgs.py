@@ -270,13 +270,13 @@ def kodyrobot_rough_env_cfg(
     cfg.rewards[
         "body_orientation_l2"
     ].params["asset_cfg"].body_names = (
-        "pelvis",
+        "base_link",
     )
 
     cfg.rewards[
         "body_ang_vel"
     ].params["asset_cfg"].body_names = (
-        "pelvis",
+        "base_link",
     )
 
     # ========================================================================
