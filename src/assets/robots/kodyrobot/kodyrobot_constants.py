@@ -375,47 +375,36 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
     # Re-verify this after the first compiled-model stand test.
     pos=(0.0, 0.0, 1.0),
     joint_pos={
-        # Left leg
-        "hip_roll_l_joint": 0.0,
-        "hip_pitch_l_joint": 0.0,
-        "hip_yaw_l_joint": 0.0,
-        "knee_pitch_l_joint": 0.0,
-        "ankle_pitch_l_joint": 0.0,
-        "ankle_roll_l_joint": 0.0,
-
-        # Right leg
-        "hip_roll_r_joint": 0.0,
-        "hip_pitch_r_joint": 0.0,
-        "hip_yaw_r_joint": 0.0,
-        "knee_pitch_r_joint": 0.0,
-        "ankle_pitch_r_joint": 0.0,
-        "ankle_roll_r_joint": 0.0,
-
-        # Waist
-        "waist_joint": 0.0,
-
-        # Left arm
-        "shoulder_pitch_l_joint": 0.0,
-        "shoulder_roll_l_joint": 0.0,
-        "shoulder_yaw_l_joint": 0.0,
-        "elbow_pitch_l_joint": 0.0,
-        "elbow_yaw_l_joint": 0.0,
-        "wrist_pitch_l_joint": 0.0,
-        "wrist_roll_l_joint": 0.0,
-
-        # Right arm
-        "shoulder_pitch_r_joint": 0.0,
-        "shoulder_roll_r_joint": 0.0,
-        "shoulder_yaw_r_joint": 0.0,
-        "elbow_pitch_r_joint": 0.0,
-        "elbow_yaw_r_joint": 0.0,
-        "wrist_pitch_r_joint": 0.0,
-        "wrist_roll_r_joint": 0.0,
-
-        # Head
-        "head_yaw_joint": 0.0,
-        "head_pitch_joint": 0.0,
-        "head_roll_joint": 0.0,
+        "hip_roll_l_joint": -0.000250,
+        "hip_yaw_l_joint": -0.006724,
+        "hip_pitch_l_joint": -2.712782,
+        "knee_pitch_l_joint": -0.053448,
+        "ankle_pitch_l_joint": -0.577301,
+        "ankle_roll_l_joint": +0.000094,
+        "hip_roll_r_joint": +0.000899,
+        "hip_yaw_r_joint": +0.007008,
+        "hip_pitch_r_joint": -2.543481,
+        "knee_pitch_r_joint": +0.054891,
+        "ankle_pitch_r_joint": -0.447073,
+        "ankle_roll_r_joint": +0.000867,
+        "waist_joint": -0.014734,
+        "shoulder_pitch_l_joint": -0.400427,
+        "shoulder_roll_l_joint": +0.780756,
+        "shoulder_yaw_l_joint": +0.688459,
+        "elbow_pitch_l_joint": -0.436332,
+        "elbow_yaw_l_joint": -0.035805,
+        "wrist_pitch_l_joint": +0.040767,
+        "wrist_roll_l_joint": -0.814177,
+        "shoulder_pitch_r_joint": -0.402002,
+        "shoulder_roll_r_joint": -0.780094,
+        "shoulder_yaw_r_joint": -0.688702,
+        "elbow_pitch_r_joint": -0.435674,
+        "elbow_yaw_r_joint": +0.035960,
+        "wrist_roll_r_joint": +0.814128,
+        "wrist_pitch_r_joint": +0.040714,
+        "head_yaw_joint": +0.829305,
+        "head_pitch_joint": -0.029820,
+        "head_roll_joint": +0.323677,
     },
     joint_vel={
         ".*": 0.0,
