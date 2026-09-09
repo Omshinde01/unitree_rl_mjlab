@@ -2,6 +2,7 @@
 <mujoco model="master_assembly_v1">
   <compiler angle="radian" meshdir="assets/" balanceinertia="true" discardvisual="false" eulerseq="xyz" autolimits="true"/>
   <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast" solver="Newton" iterations="50" tolerance="1e-8"/>
+  <size njmax="512"/>
   <default>
     <joint limited="true" damping="1.0" armature="0.005" frictionloss="0.02"/>
     <geom contype="0" conaffinity="0" group="1" density="0" rgba="0.792 0.820 0.933 1"/>
