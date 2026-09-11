@@ -9,7 +9,7 @@ from .rl_cfg import kody_robot_ppo_runner_cfg
 
 
 register_mjlab_task(
-  task_id="KodyRobot-Rough",
+  task_id="KodyRobots-Rough",
   env_cfg=kody_robot_rough_env_cfg(),
   play_env_cfg=kody_robot_rough_env_cfg(play=True),
   rl_cfg=kody_robot_ppo_runner_cfg(),
@@ -18,7 +18,7 @@ register_mjlab_task(
 
 
 register_mjlab_task(
-  task_id="KodyRobot-Flat",
+  task_id="KodyRobots-Flat",
   env_cfg=kody_robot_flat_env_cfg(),
   play_env_cfg=kody_robot_flat_env_cfg(play=True),
   rl_cfg=kody_robot_ppo_runner_cfg(),
