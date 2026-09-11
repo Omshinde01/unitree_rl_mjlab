@@ -1,6 +1,6 @@
 """KodyRobot velocity environment configurations."""
 
-from src.assets.robots.kody_robot import (
+from src.assets.robots.Kodyrobot import (
   KODY_ROBOT_ACTION_SCALE,
   get_kody_robot_cfg,
 )
