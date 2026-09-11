@@ -515,6 +515,10 @@
     <jointactuatorfrc name="head_roll_torque" joint="head_roll_joint"/>
     <framequat name="imu_quat" objtype="site" objname="imu"/>
     <gyro name="imu_gyro" site="imu"/>
+    <gyro name="imu_ang_vel" site="imu"/>
+    <velocimeter name="imu_lin_vel" site="imu"/>
+    <accelerometer name="imu_lin_acc" site="imu"/>
+    <subtreeangmom name="root_angmom" body="base_link"/>
     <accelerometer name="imu_acc" site="imu"/>
     <framepos name="frame_pos" objtype="site" objname="imu"/>
     <framelinvel name="frame_vel" objtype="site" objname="imu"/>

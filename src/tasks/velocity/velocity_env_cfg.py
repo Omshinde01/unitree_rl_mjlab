@@ -58,7 +58,7 @@ def make_velocity_env_cfg() -> ManagerBasedRlEnvCfg:
   actor_terms = {
     "base_ang_vel": ObservationTermCfg(
       func=mdp.builtin_sensor,
-      params={"sensor_name": "robot/imu_gyro"},
+      params={"sensor_name": "robot/imu_ang_vel"},
       noise=Unoise(n_min=-0.2, n_max=0.2),
     ),
     "projected_gravity": ObservationTermCfg(
