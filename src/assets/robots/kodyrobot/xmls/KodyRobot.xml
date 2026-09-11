@@ -196,7 +196,7 @@
                   <joint name="ankle_pitch_r_joint_support" type="hinge" pos="0 0 0" axis="0 1 0" range="-3.14 3.14"/>
                   <body name="RL_foot_roll_link" pos="0.0189000000000001 -0.0185999999999999 0" quat="1 0 0 0">
                     <inertial pos="-0.00804512236489707 -2.2111657782542E-06 0.0331375693530274" mass="1.017381" fullinertia="0.000821804988022 0.00378891492238 0.00420924924073 -1.2607022955e-07 -0.00027939569868 -5.63001948114e-09"/>
-                    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="RL_foot_roll_link"/>
+                    <geom name="RL_foot_roll_link_collision" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="RL_foot_roll_link"/>
                     <geom type="mesh" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="RL_foot_roll_link"/>
                     <joint name="ankle_roll_r_joint_support" type="hinge" pos="0 0 0" axis="-1 0 0" range="-3.14 3.14"/>
                     <site name="right_foot" pos="0 0 0" size="0.02" rgba="1 0 0 1"/>
@@ -251,7 +251,7 @@
                   <joint name="ankle_pitch_l_joint_support" type="hinge" pos="0 0 0" axis="0 -1 0" range="-3.14 3.14"/>
                   <body name="LL_foot_roll_link" pos="0.027339 0.027503 0.0029755" quat="0.998531268657 0 -0.0541784598732 0">
                     <inertial pos="-0.0166451223669211 -2.21116147036682E-06 0.0334209601791403" mass="1.017381" fullinertia="0.000821804987817 0.00378891492141 0.00420924923963 -1.2607031151e-07 -0.000279395698577 -5.6300087608e-09"/>
-                    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="LL_foot_roll_link"/>
+                    <geom name="LL_foot_roll_link_collision" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="LL_foot_roll_link"/>
                     <geom type="mesh" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="LL_foot_roll_link"/>
                     <joint name="ankle_roll_l_joint_support" type="hinge" pos="0 0 0" axis="1 0 0" range="-3.14 3.14"/>
                     <site name="left_foot" pos="0 0 0" size="0.02" rgba="0 0 1 1"/>
