@@ -2,9 +2,9 @@ from .tiangong2pro.tiangong_constants import (
     get_tienkung_pro_robot_cfg as get_tienkung_pro_robot_cfg,
     TIENKUNG_PRO_ACTION_SCALE as TIENKUNG_PRO_ACTION_SCALE,
 )
-from .kodyrobot.kodyrobot_constants import (
-    get_kodyrobot_robot_cfg as get_kodyrobot_robot_cfg,
-    KODYROBOT_ACTION_SCALE as KODYROBOT_ACTION_SCALE,
+from .KodyRobot.kody_robot_constants import (
+  KODY_ROBOT_ACTION_SCALE as KODY_ROBOT_ACTION_SCALE,
+  get_kody_robot_cfg as get_kody_robot_cfg,
 )
 
 from .unitree_go2.go2_constants import (
