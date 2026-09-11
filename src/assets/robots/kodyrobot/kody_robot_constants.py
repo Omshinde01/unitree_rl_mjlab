@@ -23,7 +23,7 @@ from mjlab.utils.spec_config import CollisionCfg
 ##
 
 KODY_ROBOT_XML: Path = (
-  SRC_PATH / "assets" / "robots" / "kody_robot" / "xmls" / "KodyRobot.xml"
+  SRC_PATH / "assets" / "robots" / "Kodyrobot" / "xmls" / "KodyRobot.xml"
 )
 assert KODY_ROBOT_XML.exists()
 
