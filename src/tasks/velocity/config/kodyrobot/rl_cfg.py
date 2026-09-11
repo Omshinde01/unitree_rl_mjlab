@@ -8,7 +8,7 @@ from mjlab.rl import (
 
 
 def kody_robot_ppo_runner_cfg() -> RslRlOnPolicyRunnerCfg:
-  """Create RL runner configuration for the KodyRobot velocity task."""
+  """Create RL runner configuration for KodyRobot velocity task."""
   return RslRlOnPolicyRunnerCfg(
     actor=RslRlModelCfg(
       hidden_dims=(512, 256, 128),
@@ -39,7 +39,7 @@ def kody_robot_ppo_runner_cfg() -> RslRlOnPolicyRunnerCfg:
       desired_kl=0.01,
       max_grad_norm=1.0,
     ),
-    experiment_name="kody_robot_velocity",
+    experiment_name="kodyrobot_velocity",
     save_interval=100,
     num_steps_per_env=24,
     max_iterations=10001,
