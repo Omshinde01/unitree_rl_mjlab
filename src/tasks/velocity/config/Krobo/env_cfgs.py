@@ -25,6 +25,7 @@ def kody_robot_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
   cfg.sim.mujoco.ccd_iterations = 500
   cfg.sim.contact_sensor_maxmatch = 500
   cfg.sim.nconmax = 64
+  cfg.sim.njmax = 500
 
   cfg.scene.entities = {"robot": get_kody_robot_cfg()}
 
@@ -198,10 +199,11 @@ def kody_robot_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
   """Create KodyRobot flat-terrain velocity configuration."""
   cfg = kody_robot_rough_env_cfg(play=play)
 
-  cfg.sim.njmax = 300
+  # cfg.sim.njmax = 300
   cfg.sim.mujoco.ccd_iterations = 50
   cfg.sim.contact_sensor_maxmatch = 64
   cfg.sim.nconmax = None
+  cfg.sim.njmax = 500
 
   assert cfg.scene.terrain is not None
   cfg.scene.terrain.terrain_type = "plane"
