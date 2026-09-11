@@ -56,6 +56,7 @@
   </asset>
   <worldbody>
     <body name="base_link" pos="0 0 0">
+    <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="base_link"/>
       <joint name="floating_base_joint" type="free" limited="false" actuatorfrclimited="false"/>
       <site name="imu" size="0.01" pos="0 0 0"/>
       <body name="RA_link_1" pos="0 -0.186187948022634 0.413673407354783" quat="0.13052619222 0.991444861374 0 0">

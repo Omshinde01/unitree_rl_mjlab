@@ -1,0 +1,13 @@
+[project]
+name = "unitree-rl-mjlab"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mjlab==1.2.0",
+    "mujoco==3.5.0",
+    "mujoco-warp==3.5.0",
+    "scipy>=1.15.3",
+    "warp-lang==1.12.0",
+]

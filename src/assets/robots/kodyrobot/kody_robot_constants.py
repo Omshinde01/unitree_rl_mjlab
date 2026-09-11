@@ -324,13 +324,53 @@ KODY_ACTUATOR_HEAD_ROLL = BuiltinPositionActuatorCfg(
 # Zero joint pose is used deliberately as the neutral starting configuration.
 # The URDF zero-pose places the feet at approximately the ground-contact height.
 HOME_KEYFRAME = EntityCfg.InitialStateCfg(
-  pos=(0.0, 0.0, 0.90),
-  joint_pos={
-    ".*": 0.0,
-  },
-  joint_vel={
-    ".*": 0.0,
-  },
+    pos=(0.0, 0.0, 0.8377),
+    joint_pos={
+        # Right leg
+        "right_hip_roll": 0.0,
+        "right_hip_yaw": 0.0,
+        "right_hip_pitch": 0.30,
+        "right_knee_pitch": 0.60,
+        "right_ankle_pitch": 0.408,
+        "right_ankle_roll": 0.0,
+
+        # Left leg
+        "left_hip_roll": 0.0,
+        "left_hip_yaw": 0.0,
+        "left_hip_pitch": -0.30,
+        "left_knee_pitch": -0.60,
+        "left_ankle_pitch": -0.408,
+        "left_ankle_roll": 0.0,
+
+        # Waist
+        "waist": 0.0,
+
+        # Right arm
+        "right_shoulder_pitch": 0.0,
+        "right_shoulder_roll": -0.20,
+        "right_shoulder_yaw": 0.0,
+        "right_elbow_pitch": 0.0,
+        "right_elbow_yaw": 0.0,
+        "right_wrist_pitch": 0.0,
+        "right_wrist_roll": 0.0,
+
+        # Left arm
+        "left_shoulder_pitch": 0.0,
+        "left_shoulder_roll": 0.20,
+        "left_shoulder_yaw": 0.0,
+        "left_elbow_pitch": 0.0,
+        "left_elbow_yaw": 0.0,
+        "left_wrist_roll": 0.0,
+        "left_wrist_pitch": 0.0,
+
+        # Head
+        "head_yaw": 0.0,
+        "head_pitch": 0.0,
+        "head_roll": 0.0,
+    },
+    joint_vel={
+        ".*": 0.0,
+    },
 )
 
 
