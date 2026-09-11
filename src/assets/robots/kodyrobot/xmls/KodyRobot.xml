@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mujoco model="ChittiRobo">
+<mujoco model="KodyRobot">
   <compiler angle="radian" meshdir="assets"/>
   <default>
     <joint damping="0.05" armature="0.01" frictionloss="0.2"/>
@@ -199,6 +199,7 @@
                     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="RL_foot_roll_link"/>
                     <geom type="mesh" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="RL_foot_roll_link"/>
                     <joint name="ankle_roll_r_joint_support" type="hinge" pos="0 0 0" axis="-1 0 0" range="-3.14 3.14"/>
+                    <site name="right_foot" pos="0 0 0" size="0.02" rgba="1 0 0 1"/>
                   </body>
                 </body>
                 <body name="RL_foot_pitch_crank" pos="-0.0118297398586836 -0.004 0.0841727821500247" quat="0.998531202827 0 -0.0541796731341 0">
@@ -253,6 +254,7 @@
                     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="LL_foot_roll_link"/>
                     <geom type="mesh" rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" mesh="LL_foot_roll_link"/>
                     <joint name="ankle_roll_l_joint_support" type="hinge" pos="0 0 0" axis="1 0 0" range="-3.14 3.14"/>
+                    <site name="left_foot" pos="0 0 0" size="0.02" rgba="0 0 1 1"/>
                   </body>
                 </body>
                 <body name="LL_foot_pitch_crank" pos="-0.0026528 0.0135 0.084959" quat="1 0 0 0">

@@ -34,9 +34,7 @@ def kody_robot_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
       assert isinstance(sensor, RayCastSensorCfg)
       sensor.frame.name = "hip_link"
 
-  # The generated KodyRobot XML currently has no dedicated left_foot/right_foot
-  # MuJoCo sites. Keep the contact sensors body/subtree based so the configuration
-  # remains tied to the actual KodyRobot body names.
+  # Dedicated foot sites are used for foot tracking, clearance, and slip terms.
   feet_ground_cfg = ContactSensorCfg(
     name="feet_ground_contact",
     primary=ContactMatch(
@@ -90,13 +88,27 @@ def kody_robot_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
   assert isinstance(twist_cmd, UniformVelocityCommandCfg)
   twist_cmd.viz.z_offset = 0.95
 
-  # KodyRobot does not currently expose the reference G1 foot sites in its XML.
-  # Disable site-dependent G1 terms rather than inventing site names.
-  cfg.observations["critic"].terms.pop("foot_height", None)
-  cfg.rewards.pop("foot_clearance", None)
-  cfg.rewards.pop("foot_slip", None)
+  site_names = ("left_foot", "right_foot")
+  geom_names = (
+    "LL_foot_roll_link_collision",
+    "RL_foot_roll_link_collision",
+  )
 
-  cfg.events.pop("foot_friction", None)
+  cfg.observations["critic"].terms["foot_height"].params[
+    "asset_cfg"
+  ].site_names = site_names
+
+  cfg.rewards["foot_clearance"].params[
+    "asset_cfg"
+  ].site_names = site_names
+
+  cfg.rewards["foot_slip"].params[
+    "asset_cfg"
+  ].site_names = site_names
+
+  if "foot_friction" in cfg.events:
+    cfg.events["foot_friction"].params["asset_cfg"].geom_names = geom_names
+
   cfg.events["base_com"].params["asset_cfg"].body_names = ("hip_link",)
 
   cfg.rewards["pose"].params["std_standing"] = {".*": 0.05}
