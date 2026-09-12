@@ -2,6 +2,17 @@
 
 import os
 import sys
+
+# Headless Linux/Kaggle support: select EGL before anything imports MuJoCo.
+# MuJoCo captures MUJOCO_GL during import, so setting it later is too late.
+# This only changes the backend on Linux machines that have no display;
+# existing native/Viser behavior on desktop systems is preserved.
+if sys.platform.startswith("linux") and not (
+  os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")
+):
+  os.environ.setdefault("MUJOCO_GL", "egl")
+  print(f"[INFO] Headless Linux detected: MUJOCO_GL={os.environ['MUJOCO_GL']}")
+
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
