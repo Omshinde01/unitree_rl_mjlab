@@ -31,12 +31,110 @@ class PlayConfig:
   video_height: int | None = None
   video_width: int | None = None
   camera: int | str | None = None
-  viewer: Literal["auto", "native", "viser"] = "auto"
+  viewer: Literal["auto", "native", "viser", "kaggle"] = "auto"
   no_terminations: bool = False
   """Disable all termination conditions (useful for viewing motions with dummy agents)."""
 
+  # ---------------------------------------------------------------------------
+  # Kaggle/headless playback options.
+  # These are only used when --viewer kaggle is selected.
+  # Existing native/viser/video behavior is unchanged.
+  # ---------------------------------------------------------------------------
+  kaggle_output: str = "kaggle_play.mp4"
+  kaggle_fps: int | None = None
+  kaggle_display: bool = True
+
   # Internal flag used by demo script.
   _demo_mode: tyro.conf.Suppress[bool] = False
+
+
+def _run_kaggle_viewer(
+  env: RslRlVecEnvWrapper,
+  policy,
+  video_length: int,
+  output_file: str,
+  fps: int | None,
+  display_video: bool,
+) -> None:
+  """Run a headless rollout and display the RGB render inside Kaggle/Jupyter.
+
+  This backend never creates a GLFW/native window. It uses mjlab's
+  rgb_array/offscreen renderer, writes an MP4, and optionally embeds it
+  directly in the notebook output.
+  """
+  import imageio.v2 as imageio
+  from IPython.display import HTML, display
+
+  # The RSL-RL wrapper resets the environment during construction, so
+  # observations are already available here.
+  obs = env.get_observations()
+
+  if fps is None:
+    step_dt = getattr(env.unwrapped, "step_dt", None)
+    if step_dt is not None and step_dt > 0:
+      fps = max(1, round(1.0 / float(step_dt)))
+    else:
+      fps = 30
+
+  output_path = Path(output_file)
+  output_path.parent.mkdir(parents=True, exist_ok=True)
+
+  frames = []
+  print(
+    f"[INFO] Kaggle headless viewer: rendering {video_length} steps "
+    f"at {fps} FPS"
+  )
+
+  for step in range(video_length):
+    with torch.inference_mode():
+      actions = policy(obs)
+
+    obs, _, dones, _ = env.step(actions)
+
+    # ManagerBasedRlEnv.render() supports rgb_array without GLFW.
+    frame = env.unwrapped.render()
+    if frame is not None:
+      frames.append(frame)
+
+    if torch.any(dones).item():
+      # The environment normally auto-resets terminated instances.
+      # We intentionally continue so the requested video length is reached.
+      pass
+
+  if not frames:
+    raise RuntimeError(
+      "Kaggle viewer produced no RGB frames. "
+      "Make sure --viewer kaggle is used so render_mode='rgb_array' is enabled."
+    )
+
+  imageio.mimwrite(
+    output_path,
+    frames,
+    fps=fps,
+    codec="libx264",
+    quality=8,
+  )
+
+  print(f"[INFO] Kaggle video saved to: {output_path.resolve()}")
+
+  if display_video:
+    import base64
+
+    video_bytes = output_path.read_bytes()
+    video_b64 = base64.b64encode(video_bytes).decode("ascii")
+    display(
+      HTML(
+        f"""
+        <div style="margin-top:12px">
+          <h3>G1 Simulation</h3>
+          <video controls autoplay loop style="max-width:100%; height:auto;">
+            <source src="data:video/mp4;base64,{video_b64}" type="video/mp4">
+            Your browser does not support embedded MP4 video.
+          </video>
+        </div>
+        """
+      )
+    )
 
 
 def run_play(task_id: str, cfg: PlayConfig):
@@ -81,6 +179,7 @@ def run_play(task_id: str, cfg: PlayConfig):
           "  --motion-file /path/to/motion.npz (local file)\n"
           "  --registry-name your-org/motions/motion-name (download from WandB)"
         )
+
   log_dir: Path | None = None
   resume_path: Path | None = None
   if TRAINED_MODE:
@@ -114,11 +213,19 @@ def run_play(task_id: str, cfg: PlayConfig):
   if cfg.video_width is not None:
     env_cfg.viewer.width = cfg.video_width
 
-  render_mode = "rgb_array" if (TRAINED_MODE and cfg.video) else None
+  # Existing video behavior is unchanged. The new Kaggle viewer additionally
+  # requests rgb_array rendering so that no GLFW/X11 display is required.
+  render_mode = (
+    "rgb_array"
+    if ((TRAINED_MODE and cfg.video) or cfg.viewer == "kaggle")
+    else None
+  )
+
   if cfg.video and DUMMY_MODE:
     print(
       "[WARN] Video recording with dummy agents is disabled (no checkpoint/log_dir)."
     )
+
   env = ManagerBasedRlEnv(cfg=env_cfg, device=device, render_mode=render_mode)
 
   if TRAINED_MODE and cfg.video:
@@ -171,6 +278,15 @@ def run_play(task_id: str, cfg: PlayConfig):
     NativeMujocoViewer(env, policy).run()
   elif resolved_viewer == "viser":
     ViserPlayViewer(env, policy).run()
+  elif resolved_viewer == "kaggle":
+    _run_kaggle_viewer(
+      env=env,
+      policy=policy,
+      video_length=cfg.video_length,
+      output_file=cfg.kaggle_output,
+      fps=cfg.kaggle_fps,
+      display_video=cfg.kaggle_display,
+    )
   else:
     raise RuntimeError(f"Unsupported viewer backend: {resolved_viewer}")
 
