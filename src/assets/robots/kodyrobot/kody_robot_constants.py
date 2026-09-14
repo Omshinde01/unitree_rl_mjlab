@@ -219,10 +219,8 @@ HOME_KEYFRAME = EntityCfg.InitialStateCfg(
     "knee_pitch_l_joint": -0.30,
     "ankle_pitch_r_joint": 0.25,
     "ankle_pitch_l_joint": -0.25,
-    "shoulder_pitch_r_joint": 0.6,
-    "shoulder_pitch_l_joint": -0.6,
-    "shoulder_roll_r_joint": 0.09,
-    "shoulder_roll_l_joint": -0.09,
+    "shoulder_roll_r_joint": -0.15,
+    "shoulder_roll_l_joint": 0.15,
   },
   joint_vel={".*": 0.0},
 )
