@@ -56,3 +56,10 @@ from .kodyrobot.kody_robot_constants import (
 from .kodyrobot.kody_robot_constants import (
   get_kody_robot_cfg as get_kody_robot_cfg,
 )
+
+from .skandharobot.skandha_robot_constants import (
+  SKANDHA_ROBOT_ACTION_SCALE as SKANDHA_ROBOT_ACTION_SCALE,
+)
+from .skandharobot.skandha_robot_constants import (
+  get_skandha_robot_cfg as get_skandha_robot_cfg,
+)
