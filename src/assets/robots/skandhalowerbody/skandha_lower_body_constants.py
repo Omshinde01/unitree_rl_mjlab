@@ -139,13 +139,13 @@ SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_ROLL = BuiltinPositionActuatorCfg(
   effort_limit=55.0,
   armature=0.01,
 )
-SKANDHA_LOWER_BODY_ACTUATOR_WAIST = BuiltinPositionActuatorCfg(
-  target_names_expr=(r"waist_joint",),
-  stiffness=150.0,
-  damping=5.0,
-  effort_limit=91.0,
-  armature=0.01,
-)
+# SKANDHA_LOWER_BODY_ACTUATOR_WAIST = BuiltinPositionActuatorCfg(
+#   target_names_expr=(r"waist_joint",),
+#   stiffness=150.0,
+#   damping=5.0,
+#   effort_limit=91.0,
+#   armature=0.01,
+# )
 
 
 ##
@@ -217,7 +217,7 @@ SKANDHA_LOWER_BODY_ARTICULATION = EntityArticulationInfoCfg(
     SKANDHA_LOWER_BODY_ACTUATOR_KNEE_PITCH,
     SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_PITCH,
     SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_ROLL,
-    SKANDHA_LOWER_BODY_ACTUATOR_WAIST,
+    # SKANDHA_LOWER_BODY_ACTUATOR_WAIST,
   ),
   soft_joint_pos_limit_factor=0.9,
 )
