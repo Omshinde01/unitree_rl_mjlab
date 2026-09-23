@@ -1,0 +1,32 @@
+Joint,Joint Type,Parent Link,Child Link,Hierarchy,Position,Axis,Range Min (rad),Range Max (rad),Range,Actuator Force Min,Actuator Force Max,Armature,Damping,Friction Loss
+floating_base_joint,free,worldbody,base_link,base_link,,,,,,,,0,0,0
+shoulder_pitch_r_joint,hinge,base_link,RA_link_1,base_link -> RA_link_1,0 0 0,0 1 0,-2.96706,2.96706,-2.96706 2.96706,-91,91,0,0,0
+shoulder_roll_r_joint,hinge,RA_link_1,RA_link_2,base_link -> RA_link_1 -> RA_link_2,0 0 0,1 0 0,-2.61799,0.261799,-2.61799 0.261799,-95,95,0,0,0
+shoulder_yaw_r_joint,hinge,RA_link_2,RA_link_3,base_link -> RA_link_1 -> RA_link_2 -> RA_link_3,0 0 0,0 0 1,-2.96706,2.96706,-2.96706 2.96706,-35,35,0,0,0
+elbow_pitch_r_joint,hinge,RA_link_3,RA_link_4,base_link -> RA_link_1 -> RA_link_2 -> RA_link_3 -> RA_link_4,0 0 0,0 -1 0,-2.61799,2.61799,-2.61799 2.61799,-35,35,0,0,0
+elbow_yaw_r_joint,hinge,RA_link_4,RA_link_5,base_link -> RA_link_1 -> RA_link_2 -> RA_link_3 -> RA_link_4 -> RA_link_5,0 0 0,0 0 -1,-2.96706,2.96706,-2.96706 2.96706,-24,24,0,0,0
+wrist_roll_r_joint,hinge,RA_link_5,RA_link_6,base_link -> RA_link_1 -> RA_link_2 -> RA_link_3 -> RA_link_4 -> RA_link_5 -> RA_link_6,0 0 0,-1 0 0,-1.309,1.65806,-1.309 1.65806,-6.3,6.3,0,0,0
+wrist_pitch_r_joint,hinge,RA_link_6,RA_link_7,base_link -> RA_link_1 -> RA_link_2 -> RA_link_3 -> RA_link_4 -> RA_link_5 -> RA_link_6 -> RA_link_7,0 0 0,0 -1 0,-0.785398,1.0472,-0.785398 1.0472,-6.3,6.3,0,0,0
+shoulder_pitch_l_joint,hinge,base_link,LA_link_1,base_link -> LA_link_1,0 0 0,0 1 0,-2.96706,2.96706,-2.96706 2.96706,-91,91,0,0,0
+shoulder_roll_l_joint,hinge,LA_link_1,LA_link_2,base_link -> LA_link_1 -> LA_link_2,0 0 0,1 0 0,-0.261799,2.61799,-0.261799 2.61799,-95,95,0,0,0
+shoulder_yaw_l_joint,hinge,LA_link_2,LA_link_3,base_link -> LA_link_1 -> LA_link_2 -> LA_link_3,0 0 0,0 0 1,-2.96706,2.96706,-2.96706 2.96706,-35,35,0,0,0
+elbow_pitch_l_joint,hinge,LA_link_3,LA_link_4,base_link -> LA_link_1 -> LA_link_2 -> LA_link_3 -> LA_link_4,0 0 0,0 -1 0,-2.61799,2.61799,-2.61799 2.61799,-35,35,0,0,0
+elbow_yaw_l_joint,hinge,LA_link_4,LA_link_5,base_link -> LA_link_1 -> LA_link_2 -> LA_link_3 -> LA_link_4 -> LA_link_5,0 0 0,0 0 -1,-2.96706,2.96706,-2.96706 2.96706,-24,24,0,0,0
+wrist_pitch_l_joint,hinge,LA_link_5,LA_link_6,base_link -> LA_link_1 -> LA_link_2 -> LA_link_3 -> LA_link_4 -> LA_link_5 -> LA_link_6,0 0 0,-0.0182404 0.999823 -0.00455958,-0.785398,1.0472,-0.785398 1.0472,-6.3,6.3,0,0,0
+wrist_roll_l_joint,hinge,LA_link_6,LA_link_7,base_link -> LA_link_1 -> LA_link_2 -> LA_link_3 -> LA_link_4 -> LA_link_5 -> LA_link_6 -> LA_link_7,0 0 0,-1 0 0,-1.309,1.65806,-1.309 1.65806,-6.3,6.3,0,0,0
+waist_joint,hinge,base_link,hip_link,base_link -> hip_link,0 0 0,0 0 1,-2.96706,3.14159,-2.96706 3.14159,-91,91,0,0,0
+hip_roll_r_joint,hinge,hip_link,RL_link_1,base_link -> hip_link -> RL_link_1,0 0 0,1 0 0,-0.819882,0.369248,-0.819882 0.369248,-235,235,0,0,0
+hip_yaw_r_joint,hinge,RL_link_1,RL_link_2,base_link -> hip_link -> RL_link_1 -> RL_link_2,0 0 0,0 0 1,-1.42496,1.42242,-1.42496 1.42242,-235,235,0,0,0
+hip_pitch_r_joint,hinge,RL_link_2,RL_link_3,base_link -> hip_link -> RL_link_1 -> RL_link_2 -> RL_link_3,0 0 0,0 1 0,-0.878546,1.3875,-0.878546 1.3875,-330,330,0,0,0
+knee_pitch_r_joint,hinge,RL_link_3,RL_link_4,base_link -> hip_link -> RL_link_1 -> RL_link_2 -> RL_link_3 -> RL_link_4,0 0 0,0 1 0,-1.06804,0.149513,-1.06804 0.149513,-330,330,0,0,0
+ankle_pitch_r_joint,hinge,RL_link_4,RL_foot_pitch_link,base_link -> hip_link -> RL_link_1 -> RL_link_2 -> RL_link_3 -> RL_link_4 -> RL_foot_pitch_link,0 0 0,0 -1 0,-0.578723,0.571523,-0.578723 0.571523,-55,55,0,0,0
+ankle_roll_r_joint,hinge,RL_foot_pitch_link,RL_foot_roll_link,base_link -> hip_link -> RL_link_1 -> RL_link_2 -> RL_link_3 -> RL_link_4 -> RL_foot_pitch_link -> RL_foot_roll_link,0 0 0,1 0 0,-0.349066,0.349066,-0.349066 0.349066,-55,55,0,0,0
+hip_roll_l_joint,hinge,hip_link,LL_link_1,base_link -> hip_link -> LL_link_1,0 0 0,1 0 0,-0.11531,0.706091,-0.11531 0.706091,-235,235,0,0,0
+hip_yaw_l_joint,hinge,LL_link_1,LL_link_2,base_link -> hip_link -> LL_link_1 -> LL_link_2,0 0 0,0 0 1,-1.72591,1.38648,-1.72591 1.38648,-235,235,0,0,0
+hip_pitch_l_joint,hinge,LL_link_2,LL_link_3,base_link -> hip_link -> LL_link_1 -> LL_link_2 -> LL_link_3,0 0 0,0 -1 0,-1.37159,0.868468,-1.37159 0.868468,-330,330,0,0,0
+knee_pitch_l_joint,hinge,LL_link_3,LL_link_4,base_link -> hip_link -> LL_link_1 -> LL_link_2 -> LL_link_3 -> LL_link_4,0 0 0,0 -1 0,-0.382604,0.728953,-0.382604 0.728953,-330,330,0,0,0
+ankle_pitch_l_joint,hinge,LL_link_4,LL_foot_pitch_link,base_link -> hip_link -> LL_link_1 -> LL_link_2 -> LL_link_3 -> LL_link_4 -> LL_foot_pitch_link,0 0 0,0 1 0,-0.651588,0.653963,-0.651588 0.653963,-55,55,0,0,0
+ankle_roll_l_joint,hinge,LL_foot_pitch_link,LL_foot_roll_link,base_link -> hip_link -> LL_link_1 -> LL_link_2 -> LL_link_3 -> LL_link_4 -> LL_foot_pitch_link -> LL_foot_roll_link,0 0 0,1 0 0,-0.349066,0.349066,-0.349066 0.349066,-55,55,0,0,0
+head_yaw_joint,hinge,base_link,head_link_1,base_link -> head_link_1,0 0 0,0 0 1,-1.5708,1.5708,-1.5708 1.5708,-6.3,6.3,0,0,0
+head_pitch_joint,hinge,head_link_1,head_link_2,base_link -> head_link_1 -> head_link_2,0 0 0,0 -1 0,-0.436332,0.436332,-0.436332 0.436332,-6.3,6.3,0,0,0
+head_roll_joint,hinge,head_link_2,head_link_3,base_link -> head_link_1 -> head_link_2 -> head_link_3,0 0 0,1 0 0,-0.453786,0.453786,-0.453786 0.453786,-6.3,6.3,0,0,0

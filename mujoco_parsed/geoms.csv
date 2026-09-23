@@ -1,0 +1,109 @@
+Geom,Body / Link,Parent Body,Type,Mesh,Position,Quaternion,Group,Contype,Conaffinity,Density,RGBA
+,base_link,worldbody,mesh,base_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+base_link_collision,base_link,worldbody,mesh,base_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RA_link_1,base_link,mesh,RA_link_1,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RA_link_1_collision,RA_link_1,base_link,mesh,RA_link_1_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RA_link_2,RA_link_1,mesh,RA_link_2,,,1,0,0,0,0.894118 0.894118 0.894118 1
+RA_link_2_collision,RA_link_2,RA_link_1,mesh,RA_link_2_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,RA_link_3,RA_link_2,mesh,RA_link_3,,,1,0,0,0,0.894118 0.894118 0.894118 1
+RA_link_3_collision,RA_link_3,RA_link_2,mesh,RA_link_3_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,RA_link_4,RA_link_3,mesh,RA_link_4,,,1,0,0,0,0.894118 0.894118 0.894118 1
+RA_link_4_collision,RA_link_4,RA_link_3,mesh,RA_link_4_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,RA_link_5,RA_link_4,mesh,RA_link_5,,,1,0,0,0,0.627451 0.627451 0.627451 1
+RA_link_5_collision,RA_link_5,RA_link_4,mesh,RA_link_5_collision,,,3,,,,0.627451 0.627451 0.627451 0
+,RA_link_6,RA_link_5,mesh,RA_link_6,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RA_link_6_collision,RA_link_6,RA_link_5,mesh,RA_link_6_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RA_link_7,RA_link_6,mesh,RA_link_7,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RA_link_7_collision,RA_link_7,RA_link_6,mesh,RA_link_7_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RA_hand_link,RA_link_7,mesh,RA_hand_link,-0.824664 0 0.149873,0.707107 0 0 0.707107,1,0,0,0,0.792157 0.819608 0.933333 1
+RA_hand_link_collision,RA_hand_link,RA_link_7,mesh,RA_hand_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RA_link_6_motor_crank_shaft,RA_link_5,mesh,RA_link_6_motor_crank_shaft,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RA_link_6_motor_crank_shaft_collision,RA_link_6_motor_crank_shaft,RA_link_5,mesh,RA_link_6_motor_crank_shaft_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LA_link_1,base_link,mesh,LA_link_1,0 0 0,1.32679e-06 1 0 0,1,0,0,0,0.792157 0.819608 0.933333 1
+LA_link_1_collision,LA_link_1,base_link,mesh,LA_link_1_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LA_link_2,LA_link_1,mesh,LA_link_2,,0.707098 0.707101 -0.00322464 0.00322465,1,0,0,0,0.894118 0.894118 0.894118 1
+LA_link_2_collision,LA_link_2,LA_link_1,mesh,LA_link_2_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,LA_link_3,LA_link_2,mesh,LA_link_3,,1.32678e-06 0.99999 -6.05063e-09 0.00456033,1,0,0,0,0.894118 0.894118 0.894118 1
+LA_link_3_collision,LA_link_3,LA_link_2,mesh,LA_link_3_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,LA_link_4,LA_link_3,mesh,LA_link_4,,0.707098 0.707101 -0.00322464 0.00322465,1,0,0,0,0.894118 0.894118 0.894118 1
+LA_link_4_collision,LA_link_4,LA_link_3,mesh,LA_link_4_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,LA_link_5,LA_link_4,mesh,LA_link_5,0 0 0,0.707098 0.707101 -0.00322464 0.00322465,1,0,0,0,0.894118 0.894118 0.894118 1
+LA_link_5_collision,LA_link_5,LA_link_4,mesh,LA_link_5_collision,,,3,,,,0.894118 0.894118 0.894118 0
+,LA_link_6,LA_link_5,mesh,LA_link_6,,0.707099 0.00322569 -0.707077 0.00644743,1,0,0,0,0.792157 0.819608 0.933333 1
+LA_link_6_collision,LA_link_6,LA_link_5,mesh,LA_link_6_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LA_link_7,LA_link_6,mesh,LA_link_7,,0.481349 -0.483548 0.515774 -0.518132,1,0,0,0,0.792157 0.819608 0.933333 1
+LA_link_7_collision,LA_link_7,LA_link_6,mesh,LA_link_7_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LA_hand_link,LA_link_7,mesh,LA_hand_link,,0.481349 -0.483548 -0.515774 0.518132,1,0,0,0,0.792157 0.819608 0.933333 1
+LA_hand_link_collision,LA_hand_link,LA_link_7,mesh,LA_hand_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LA_link_6_crank_shaft,LA_link_5,mesh,LA_link_6_crank_shaft,,1.32578e-06 0.999237 5.18285e-08 -0.039063,1,0,0,0,0.792157 0.819608 0.933333 1
+LA_link_6_crank_shaft_collision,LA_link_6_crank_shaft,LA_link_5,mesh,LA_link_6_crank_shaft_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,hip_link,base_link,mesh,hip_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+hip_link_collision,hip_link,base_link,mesh,hip_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_link_1,hip_link,mesh,RL_link_1,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_link_1_collision,RL_link_1,hip_link,mesh,RL_link_1_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_link_2,RL_link_1,mesh,RL_link_2,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_link_2_collision,RL_link_2,RL_link_1,mesh,RL_link_2_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_link_3,RL_link_2,mesh,RL_link_3,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_link_3_collision,RL_link_3,RL_link_2,mesh,RL_link_3_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_link_4,RL_link_3,mesh,RL_link_4,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_link_4_collision,RL_link_4,RL_link_3,mesh,RL_link_4_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_foot_pitch_link,RL_link_4,mesh,RL_foot_pitch_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_foot_pitch_link_collision,RL_foot_pitch_link,RL_link_4,mesh,RL_foot_pitch_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_foot_roll_link,RL_foot_pitch_link,mesh,RL_foot_roll_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_foot_roll_link_collision,RL_foot_roll_link,RL_foot_pitch_link,mesh,RL_foot_roll_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+RL_foot_roll_link_contact0,RL_foot_roll_link,RL_foot_pitch_link,sphere,,0.04629009 -0.04668005 0.05030000,,3,,,,0.79 0.82 0.93 0
+RL_foot_roll_link_contact1,RL_foot_roll_link,RL_foot_pitch_link,sphere,,0.04629009 0.04668005 0.05030000,,3,,,,0.79 0.82 0.93 0
+RL_foot_roll_link_contact2,RL_foot_roll_link,RL_foot_pitch_link,sphere,,-0.09147107 -0.04707107 0.05030000,,3,,,,0.79 0.82 0.93 0
+RL_foot_roll_link_contact3,RL_foot_roll_link,RL_foot_pitch_link,sphere,,-0.09147107 0.04707107 0.05030000,,3,,,,0.79 0.82 0.93 0
+,RL_foot_pitch_crank,RL_link_4,mesh,RL_foot_pitch_crank,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_foot_pitch_crank_collision,RL_foot_pitch_crank,RL_link_4,mesh,RL_foot_pitch_crank_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_foot_roll_crank,RL_link_4,mesh,RL_foot_roll_crank,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_foot_roll_crank_collision,RL_foot_roll_crank,RL_link_4,mesh,RL_foot_roll_crank_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,RL_link_4_crank_shaft,RL_link_3,mesh,RL_link_4_crank_shaft,,,1,0,0,0,0.792157 0.819608 0.933333 1
+RL_link_4_crank_shaft_collision,RL_link_4_crank_shaft,RL_link_3,mesh,RL_link_4_crank_shaft_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_link_1,hip_link,mesh,LL_link_1,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_link_1_collision,LL_link_1,hip_link,mesh,LL_link_1_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_link_2,LL_link_1,mesh,LL_link_2,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_link_2_collision,LL_link_2,LL_link_1,mesh,LL_link_2_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_link_3,LL_link_2,mesh,LL_link_3,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_link_3_collision,LL_link_3,LL_link_2,mesh,LL_link_3_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_link_4,LL_link_3,mesh,LL_link_4,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_link_4_collision,LL_link_4,LL_link_3,mesh,LL_link_4_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_foot_pitch_link,LL_link_4,mesh,LL_foot_pitch_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_foot_pitch_link_collision,LL_foot_pitch_link,LL_link_4,mesh,LL_foot_pitch_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_foot_roll_link,LL_foot_pitch_link,mesh,LL_foot_roll_link,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_foot_roll_link_collision,LL_foot_roll_link,LL_foot_pitch_link,mesh,LL_foot_roll_link_collision,,,3,,,,0.792157 0.819608 0.933333 0
+LL_foot_roll_link_contact0,LL_foot_roll_link,LL_foot_pitch_link,sphere,,0.09291377 -0.03226250 0.05100000,,3,,,,0.79 0.82 0.93 0
+LL_foot_roll_link_contact1,LL_foot_roll_link,LL_foot_pitch_link,sphere,,0.09291378 0.03226250 0.05100000,,3,,,,0.79 0.82 0.93 0
+LL_foot_roll_link_contact2,LL_foot_roll_link,LL_foot_pitch_link,sphere,,0.02004023 -0.03659442 0.05100000,,3,,,,0.79 0.82 0.93 0
+LL_foot_roll_link_contact3,LL_foot_roll_link,LL_foot_pitch_link,sphere,,0.01241422 0.03223670 0.05100000,,3,,,,0.79 0.82 0.93 0
+,LL_foot_pitch_crank,LL_link_4,mesh,LL_foot_pitch_crank,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_foot_pitch_crank_collision,LL_foot_pitch_crank,LL_link_4,mesh,LL_foot_pitch_crank_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_foot_roll_crank,LL_link_4,mesh,LL_foot_roll_crank,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_foot_roll_crank_collision,LL_foot_roll_crank,LL_link_4,mesh,LL_foot_roll_crank_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,LL_link_4_crank_shaft,LL_link_3,mesh,LL_link_4_crank_shaft,,,1,0,0,0,0.792157 0.819608 0.933333 1
+LL_link_4_crank_shaft_collision,LL_link_4_crank_shaft,LL_link_3,mesh,LL_link_4_crank_shaft_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,hip_right_site_imu,hip_link,mesh,hip_right_site_imu,,,1,0,0,0,0.752941 0.752941 0.752941 1
+hip_right_site_imu_collision,hip_right_site_imu,hip_link,mesh,hip_right_site_imu_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,hip_left_site_imu,hip_link,mesh,hip_left_site_imu,,,1,0,0,0,0.752941 0.752941 0.752941 1
+hip_left_site_imu_collision,hip_left_site_imu,hip_link,mesh,hip_left_site_imu_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,hip_rear_site_imu,hip_link,mesh,hip_rear_site_imu,,,1,0,0,0,0.752941 0.752941 0.752941 1
+hip_rear_site_imu_collision,hip_rear_site_imu,hip_link,mesh,hip_rear_site_imu_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,vectornav_hip_front_site_imu,hip_link,mesh,vectornav_hip_front_site_imu,,,1,0,0,0,0.752941 0.752941 0.752941 1
+vectornav_hip_front_site_imu_collision,vectornav_hip_front_site_imu,hip_link,mesh,vectornav_hip_front_site_imu_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,lower_chest_camera,base_link,mesh,gemini_depth_camera,,,1,0,0,0,0.752941 0.752941 0.752941 1
+lower_chest_camera_collision,lower_chest_camera,base_link,mesh,gemini_depth_camera_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,upper_chest_front_camera,base_link,mesh,gemini_depth_camera,,,1,0,0,0,0.752941 0.752941 0.752941 1
+upper_chest_front_camera_collision,upper_chest_front_camera,base_link,mesh,gemini_depth_camera_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,upper_chest_rear_camera,base_link,mesh,gemini_depth_camera,,,1,0,0,0,0.752941 0.752941 0.752941 1
+upper_chest_rear_camera_collision,upper_chest_rear_camera,base_link,mesh,gemini_depth_camera_collision,,,3,,,,0.752941 0.752941 0.752941 0
+,head_link_1,base_link,mesh,head_link_1,,,1,0,0,0,0.792157 0.819608 0.933333 1
+head_link_1_collision,head_link_1,base_link,mesh,head_link_1_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,head_link_2,head_link_1,mesh,head_link_2,,,1,0,0,0,0.792157 0.819608 0.933333 1
+head_link_2_collision,head_link_2,head_link_1,mesh,head_link_2_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,head_link_3,head_link_2,mesh,head_link_3,,,1,0,0,0,0.792157 0.819608 0.933333 1
+head_link_3_collision,head_link_3,head_link_2,mesh,head_link_3_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,head_link_3_crank_shaft,head_link_3,mesh,head_link_3_crank_shaft,,,1,0,0,0,0.792157 0.819608 0.933333 1
+head_link_3_crank_shaft_collision,head_link_3_crank_shaft,head_link_3,mesh,head_link_3_crank_shaft_collision,,,3,,,,0.792157 0.819608 0.933333 0
+,head_camera,head_link_3,mesh,head_camera,,,1,0,0,0,0.792157 0.819608 0.933333 1
+head_camera_collision,head_camera,head_link_3,mesh,head_camera_collision,,,3,,,,0.792157 0.819608 0.933333 0

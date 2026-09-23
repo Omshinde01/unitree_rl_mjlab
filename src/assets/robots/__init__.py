@@ -63,3 +63,10 @@ from .skandharobot.skandha_robot_constants import (
 from .skandharobot.skandha_robot_constants import (
   get_skandha_robot_cfg as get_skandha_robot_cfg,
 )
+
+from .skandhalowerbody.skandha_lower_body_constants import (
+  SKANDHA_LOWER_BODY_ACTION_SCALE as SKANDHA_LOWER_BODY_ACTION_SCALE,
+)
+from .skandhalowerbody.skandha_lower_body_constants import (
+  get_skandha_lower_body_cfg as get_skandha_lower_body_cfg,
+)

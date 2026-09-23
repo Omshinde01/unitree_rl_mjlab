@@ -1,0 +1,8 @@
+Site,Body / Link,Position,Quaternion,Size,Type,RGBA
+imu,base_link,0 0 0,,0.01,,
+right_foot,RL_foot_roll_link,-0.02259049 -0.00000000 0.05030000,,0.01,,1 0 0 1
+left_foot,LL_foot_roll_link,0.05457050 -0.00108943 0.05100000,,0.01,,1 0 0 1
+hip_right_site_imu_site,hip_right_site_imu,0 0 0,,,,
+hip_left_site_imu_site,hip_left_site_imu,0 0 0,,,,
+hip_rear_site_imu_site,hip_rear_site_imu,0 0 0,,,,
+vectornav_hip_front_site_imu_site,vectornav_hip_front_site_imu,0 0 0,,,,
