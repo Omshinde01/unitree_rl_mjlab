@@ -1,4 +1,4 @@
-# Skandha — Robotics Handoff Sheet
+# Skandha
 
 What we need from you, and exactly what the trained policy reads/sends each tick.
 
@@ -43,23 +43,11 @@ What we need from you, and exactly what the trained policy reads/sends each tick
 | 18 | Foot force/pressure sensing availability, if any                                                              | Optional   |
 | 19 | Any other onboard sensors relevant to balance/locomotion (e.g. additional IMUs, cameras, lidar)               | Optional   |
 
-### Electrical / Compute / Comms
-
-| #  | Item                                                                               | Priority   |
-| -- | ---------------------------------------------------------------------------------- | ---------- |
-| 20 | Communication interface and protocol between onboard compute and joint controllers | Compulsory |
-| 21 | Round-trip command latency and jitter, compute → joint → feedback                | Compulsory |
-| 22 | Onboard compute specs available for running the policy network                     | Compulsory |
-| 23 | Power/battery budget and expected runtime                                          | Optional   |
-
-### Safety
-
-| #  | Item                                                               | Priority   |
-| -- | ------------------------------------------------------------------ | ---------- |
-| 24 | E-stop behavior per joint (torque-off vs. hold-position vs. other) | Compulsory |
-| 25 | Behavior on comms loss                                             | Compulsory |
-| 26 | Thermal/current fault limits and their triggered behavior          | Compulsory |
-| 27 | Homing/calibration procedure and expected zero-position accuracy   | Compulsory |
+> Electrical/Compute/Comms and Safety items (comms protocol, latency, E-stop
+> behavior, fault limits, etc.) are intentionally left out of this ask — those are
+> live-hardware / bring-up concerns that only matter once the policy is actually
+> commanding powered motors on the robot. Not needed for the current
+> inference-pipeline / preliminary-URDF stage.
 
 ---
 

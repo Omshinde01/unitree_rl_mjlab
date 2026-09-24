@@ -1,56 +1,52 @@
 """SkandhaLowerBody constants.
 
-SkandhaLowerBody is a 13-DOF lower-body-only derivative of ``skandharobot``
-(see ``src/assets/robots/skandharobot/skandha_robot_constants.py``), produced by
-deleting the arm, head, and chest-camera subtrees from ``SkandhaRobot.xml`` and
-keeping everything else (torso, waist, both legs, hip-mounted IMU bracket bodies)
-byte-identical:
-  - The floating base is still ``base_link`` (the torso/chest) -- unchanged mass,
-    inertia, and mesh, even though it no longer carries arms/head/cameras as
-    children. This is a deliberate simplification (documented below), not an
-    attempt to redistribute the removed mass back onto the torso.
-  - ``hip_link`` still hangs *below* the torso through the single-DOF
-    ``waist_joint`` -- kept, since it is the torso<->pelvis joint, not an
-    upper-body joint.
+SkandhaLowerBody is a 12-DOF lower-body-only derivative of ``skandharobot``
+(see ``src/assets/robots/skandharobot/skandha_robot_constants.py``), matching the
+real "hip down" test-rig hardware in the standalone lower-body URDF
+(``lower_body.urdf.xacro``): that description mounts ``hip_link`` directly on a
+fixed bench gantry (a physical test stand, not simulated here) with **no torso
+body and no waist joint above it at all** -- the waist joint only exists as the
+torso<->pelvis connection in the full humanoid, so it has no meaning once the
+torso is removed.
+
+Earlier revisions of this file mistakenly kept ``base_link`` (the torso) as the
+floating base with ``hip_link`` hanging below it through ``waist_joint`` -- and
+since that joint had no actuator (see the prior commit that commented out
+``SKANDHA_LOWER_BODY_ACTUATOR_WAIST``), it was left in the compiled model as a
+**free-swinging, undamped, unactuated hinge** between the (nonexistent-in-reality)
+torso and the pelvis. This has been corrected: ``hip_link`` is now the floating
+base directly (its own free joint), matching the real hardware exactly:
+  - ``base_link`` and ``waist_joint`` are removed entirely -- not merely
+    unactuated, gone from the kinematic tree.
   - Both 6-DOF legs (hip roll/yaw/pitch, knee pitch, ankle pitch/roll) are
-    unchanged.
-  - Removed entirely: both 7-DOF arms, the 3-DOF head, and the three chest-camera
-    dummy bodies.
+    unchanged, still hanging off ``hip_link`` with identical transforms.
+  - The hip-mounted IMU bracket bodies are unchanged, now direct children of the
+    root ``hip_link`` instead of grandchildren through ``base_link``.
 
 Every joint range, effort limit, and PD gain below is copied verbatim from
 ``skandha_robot_constants.py`` for the joints that survive -- this is the same
-physical leg/waist hardware, just fewer actuated joints, not a re-derivation.
-
-## Why keep the torso body at all?
-
-A floating base needs *some* rigid body to be the free-jointed root and to define
-where the legs/waist mount -- ``base_link`` is that body. Its mass (9.206 kg) and
-inertia are Skandha's own real torso-shell values (not a KodyRobot substitution,
-see the parent robot's README), so it is a physically meaningful "lower body +
-torso shell" model, not a placeholder. Whether a *real* lower-body-only test rig
-should carry additional ballast mass to represent the removed arms/head is a
-hardware question for the robotics team, not something guessed here -- flagged
-in ``src/assets/robots/skandhalowerbody/README.md``.
+physical leg hardware, just fewer actuated joints, not a re-derivation.
 
 ## Total mass
 
-Compiled model total mass: **~45.14 kg** (full Skandha is ~56.2 kg; the ~11 kg
-difference is the removed arms + head + chest-camera dummies).
+Compiled model total mass: **~35.9 kg** (recomputed after removing ``base_link``;
+the prior, incorrect torso-inclusive figure was ~45.14 kg).
 
 ## Home keyframe
 
-Reuses the exact same base height and leg/waist joint angles as full Skandha's
-home keyframe (see that file for the forward-kinematics derivation) -- leg
-kinematics are unaffected by removing the arms/head, and this was verified
-directly: with these same values, all 8 foot-contact-sphere geoms land within
-<1 mm of world Z = 0 on this trimmed model. The two ``shoulder_roll`` entries
-from the full-body keyframe are dropped since there are no arm joints here.
+Reuses the same leg joint angles as full Skandha's home keyframe (leg kinematics
+are unaffected by which body is the floating root) with the root height adjusted
+for the new root body: ``hip_link``'s own world Z is full Skandha's base height
+(0.8692443230706399) plus the (negative) local offset ``hip_link`` used to sit at
+under ``base_link`` (-0.0316317206795731), giving 0.8376126023910668. Verified
+directly on the corrected model: all 8 foot-contact-sphere geoms land within
+<1 mm of world Z = 0.
 
 ## Actuators
 
 Unchanged from ``skandha_robot_constants.py`` for every joint group that
-survives: hip_roll, hip_yaw, hip_pitch, knee_pitch, ankle_pitch, ankle_roll,
-waist. The arm/head/wrist actuator groups are simply not instantiated.
+survives: hip_roll, hip_yaw, hip_pitch, knee_pitch, ankle_pitch, ankle_roll.
+There is no waist actuator group -- there is no waist joint.
 """
 
 from pathlib import Path
@@ -139,24 +135,17 @@ SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_ROLL = BuiltinPositionActuatorCfg(
   effort_limit=55.0,
   armature=0.01,
 )
-# SKANDHA_LOWER_BODY_ACTUATOR_WAIST = BuiltinPositionActuatorCfg(
-#   target_names_expr=(r"waist_joint",),
-#   stiffness=150.0,
-#   damping=5.0,
-#   effort_limit=91.0,
-#   armature=0.01,
-# )
 
 
 ##
 # Keyframe config.
 ##
 
-# See module docstring: identical leg/waist values to full Skandha's home
-# keyframe, verified flat-footed (<1mm) on this trimmed model. No arm joints
-# to set (shoulder_roll_r/l dropped -- they don't exist here).
+# See module docstring: identical leg joint values to full Skandha's home
+# keyframe, root height adjusted for hip_link now being the floating root
+# directly. Verified flat-footed (<1mm) on the corrected model.
 HOME_KEYFRAME = EntityCfg.InitialStateCfg(
-  pos=(0.0, 0.0, 0.8692443230706399),
+  pos=(0.0, 0.0, 0.8376126023910668),
   joint_pos={
     "hip_pitch_r_joint": 0.20573850000000002,
     "hip_pitch_l_joint": -0.20573850000000002,
@@ -217,7 +206,6 @@ SKANDHA_LOWER_BODY_ARTICULATION = EntityArticulationInfoCfg(
     SKANDHA_LOWER_BODY_ACTUATOR_KNEE_PITCH,
     SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_PITCH,
     SKANDHA_LOWER_BODY_ACTUATOR_ANKLE_ROLL,
-    # SKANDHA_LOWER_BODY_ACTUATOR_WAIST,
   ),
   soft_joint_pos_limit_factor=0.9,
 )

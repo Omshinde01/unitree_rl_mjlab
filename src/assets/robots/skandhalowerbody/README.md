@@ -1,36 +1,38 @@
 # SkandhaLowerBody
 
-A 13-DOF lower-body-only derivative of `skandharobot`, integrated into this repo's
-mjlab-based velocity RL pipeline the same way `skandharobot` itself is. Built by
-programmatically stripping the arm, head, and chest-camera subtrees out of the
-existing, already-verified `SkandhaRobot.xml` — **the full `skandharobot` integration
-was not modified in any way** to produce this robot.
+A 12-DOF lower-body-only derivative of `skandharobot`, integrated into this repo's
+mjlab-based velocity RL pipeline the same way `skandharobot` itself is.
 
 ## 0. What "lower body" means here
 
-Kept: the torso (`base_link`, still the floating base), the pelvis-like `hip_link`
-hanging below it through `waist_joint`, and both 6-DOF legs.
+Confirmed against the real hardware description (`lower_body.urdf.xacro` in the
+standalone lower-body URDF package): the physical "hip down" test rig mounts
+`hip_link` directly on a fixed bench gantry (a physical test stand — not simulated
+here), with **no torso body and no waist joint above it**. The waist joint only
+exists as the torso↔pelvis connection in the full humanoid; it has no meaning once
+the torso is removed.
 
-Removed entirely: both 7-DOF arms, the 3-DOF head, and the three chest-camera dummy
-bodies.
+Kept: `hip_link` (now the floating base directly) and both 6-DOF legs.
+
+Removed entirely: `base_link` (the torso), `waist_joint`, both 7-DOF arms, the
+3-DOF head, and the three chest-camera dummy bodies.
 
 | Group | Joints (×2, `_r`/`_l`) | DOF |
 |---|---|---|
 | Leg | `hip_roll`, `hip_yaw`, `hip_pitch`, `knee_pitch`, `ankle_pitch`, `ankle_roll` | 6×2 = 12 |
-| Waist | `waist_joint` | 1 |
-| **Total** | | **13** |
+| **Total** | | **12** |
 
-Compiled model total mass: **~45.14 kg** (full Skandha is ~56.2 kg; the ~11 kg
-difference is the removed arms + head + chest-camera dummies).
+Compiled model total mass: **~35.9 kg**.
 
-`base_link`'s own mass/inertia (9.206 kg — Skandha's own real torso-shell value, not
-a substitution) is kept **unchanged**, even though it no longer has arms/head as
-children. This is a deliberate simplification: no attempt was made to guess how much
-additional ballast mass a real physical lower-body-only rig would need on the torso
-to represent the removed arms/head. **If the real test rig keeps the arms/head
-physically attached as dead weight (not actuated) rather than removing them
-entirely, `base_link`'s mass/inertia here will need to be increased accordingly —
-this is a question for the robotics team, not something resolved here.**
+### Corrected from an earlier revision
+
+This robot previously (incorrectly) kept `base_link` as the floating base with
+`hip_link` hanging below it through `waist_joint`. Since that joint's actuator was
+already commented out (no PD control on it), it existed in the compiled model as a
+**free-swinging, undamped, unactuated hinge** between the torso and pelvis — not
+just "unactuated" but a genuine uncontrolled extra DOF. This has been fixed:
+`base_link` and `waist_joint` are now removed from the kinematic tree entirely, and
+`hip_link` carries the free joint directly, matching the real hip-down hardware.
 
 ## 1. How the XML was derived
 
@@ -65,26 +67,35 @@ caveats already documented there (e.g. ankle_roll's ±20° fallback range, the
 mass-substitution rationale) — all of those caveats still apply here unchanged, since
 none of the surviving hardware was touched.
 
+A follow-up pass (see "Corrected from an earlier revision" above) went one step
+further and removed `base_link`/`waist_joint` too, after the standalone lower-body
+URDF package confirmed the real hardware has no torso above `hip_link` at all —
+`hip_link` now carries the free joint directly, and its mesh/collision/asset
+registrations were simply moved up a nesting level (no new mesh files were needed;
+everything was already present in this robot's own `xmls/assets/`).
+
 ## 2. Home keyframe
 
-Reuses `skandharobot`'s exact home-keyframe base height and leg/waist joint angles
-(no re-derivation needed — leg kinematics are unaffected by removing the arms/head).
-Verified directly on this trimmed model: with these same values, all 8
+Reuses full Skandha's leg joint angles (leg kinematics are unaffected by which body
+is the floating root) with the root height recomputed for `hip_link` now being the
+root directly: full Skandha's base height (0.8692443230706399) plus the local
+offset `hip_link` used to sit at under `base_link` (-0.0316317206795731), giving
+0.8376126023910668. Verified directly on the corrected model: all 8
 foot-contact-sphere geoms land within **<1 mm** of world Z = 0.
 
 ```python
-pos = (0, 0, 0.8692443230706399)
+pos = (0, 0, 0.8376126023910668)
 hip_pitch_r=+0.2057   hip_pitch_l=-0.2057
 knee_pitch_r=-0.1822  knee_pitch_l=+0.1822
 ankle_pitch_r=-0.0849 ankle_pitch_l=+0.0849
-# everything else = 0 (no arm joints exist to set)
+# everything else = 0 (no arm/waist joints exist to set)
 ```
 
 ## 3. Actuators
 
-Identical gains/limits to `skandharobot`'s corresponding joint groups (same
-hardware) — just the leg + waist groups; the arm/head/wrist actuator groups are not
-instantiated at all.
+Identical gains/limits to `skandharobot`'s corresponding leg joint groups (same
+hardware); the arm/head/wrist/waist actuator groups are not instantiated at all —
+there is no waist joint to actuate.
 
 | Joint group | stiffness | damping | effort limit (N·m) | armature |
 |---|---|---|---|---|
@@ -94,7 +105,6 @@ instantiated at all.
 | knee_pitch | 250 | 8.0 | 330 | 0.01 |
 | ankle_pitch | 60 | 2.5 | 55 | 0.01 |
 | ankle_roll | 60 | 2.5 | 55 | 0.01 |
-| waist | 150 | 5.0 | 91 | 0.01 |
 
 `SKANDHA_LOWER_BODY_ACTION_SCALE` is `0.25 * effort_limit / stiffness` per joint,
 same formula as `skandharobot`.
@@ -107,15 +117,11 @@ SkandhaLowerBody-Flat    # flat plane, no height scan
 ```
 
 Same reward/observation/event wiring as `Skandha-*` (see
-`src/tasks/velocity/config/skandhalowerbody/env_cfgs.py`), with the arm/head entries
-dropped from the `pose` reward's per-joint-category standard deviations (there are no
-arm/head joints to shape).
+`src/tasks/velocity/config/skandhalowerbody/env_cfgs.py`), with the arm/head/waist
+entries dropped from the `pose` reward's per-joint-category standard deviations
+(there are no arm, head, or waist joints to shape).
 
-Observation dimensions: actor **50** / critic **65** (flat terrain) — vs. full
-Skandha's 101 / 116, the difference being the 17 fewer joints (34 fewer
-position+velocity+action values) and 3 fewer command-adjacent... actually just the
-joint-count-driven terms shrinking (`joint_pos`/`joint_vel`/`actions`: 30→13 each).
-Action dimension: **13**.
+Action dimension: **12** (legs only — no waist).
 
 ## 5. Training
 
@@ -138,14 +144,7 @@ Run from the `unitree_rl_mjlab/` directory with `PYTHONPATH` including that dire
 |---|---|
 | MJCF compiles natively in MuJoCo (`mujoco.MjSpec.from_file` → `.compile()`) | PASS |
 | `mj_forward` at the home keyframe, no NaNs | PASS |
-| Home-keyframe flat-footedness (reused values, re-verified on this model) | PASS — all 8 foot-contact spheres within <1 mm of Z=0 |
-| Task registration (`SkandhaLowerBody-Flat` / `-Rough` appear in `scripts/list_envs.py`) | PASS |
-| Env build + observation/action wiring (`ManagerBasedRlEnv`) — actor 50-dim (flat) / 237-dim (rough), action 13-dim | PASS |
-| Short rollout, flat: 50-step zero-action + 100-step random-action, 4 parallel envs, no NaNs | PASS |
-| Short rollout, rough: 50-step zero-action + 100-step random-action, 4 parallel envs, no NaNs | PASS |
-| `Skandha-Flat` regression (full-body robot still builds/steps unmodified after this addition) | PASS |
-
-Not yet run: an actual PPO training session (the parent `skandharobot` integration
-verified 3 PPO iterations end-to-end with an ONNX export; the same is recommended
-here before large-scale training investment, but was not run as part of this
-integration).
+| Home-keyframe flat-footedness (root height recomputed for `hip_link`-as-root) | PASS — all 8 foot-contact spheres within <1 mm of Z=0 |
+| `get_skandha_lower_body_cfg()` → `Entity(...).spec.compile()` — nu=12, no `base_link`/`waist_joint` | PASS |
+| Task registration (`SkandhaLowerBody-Flat` / `-Rough`) | PASS |
+| Env build + 300-step random-action rollout, 4 parallel envs, both terrain variants | PASS, no NaNs |

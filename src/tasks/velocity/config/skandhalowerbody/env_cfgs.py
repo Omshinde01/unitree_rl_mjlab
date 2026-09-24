@@ -14,12 +14,12 @@ from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
 from src.tasks.velocity.velocity_env_cfg import make_velocity_env_cfg
 
-# SkandhaLowerBody's floating base is `base_link` (the torso/chest) -- same as the
-# full skandharobot. The pelvis-like `hip_link` hangs below it through
-# `waist_joint`. Every "root body" reference below (raycast frame, IMU-derived
-# observations, viewer target, CoM randomization, orientation/ang-vel rewards)
-# therefore targets `base_link`, exactly as in skandharobot.
-_ROOT_BODY = "base_link"
+# SkandhaLowerBody's floating base is `hip_link` directly -- there is no torso
+# body and no waist joint in this "hip down" model (see the corrected
+# skandha_lower_body_constants.py module docstring). Every "root body" reference
+# below (raycast frame, IMU-derived observations, viewer target, CoM
+# randomization, orientation/ang-vel rewards) targets `hip_link`.
+_ROOT_BODY = "hip_link"
 _FEET_SITES = ("left_foot", "right_foot")
 _FEET_CONTACT_GEOMS = tuple(
   f"{link}_contact{i}" for link in ("RL_foot_roll_link", "LL_foot_roll_link") for i in range(4)
@@ -89,12 +89,11 @@ def skandha_lower_body_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg
   cfg.events["foot_friction"].params["asset_cfg"].geom_names = _FEET_CONTACT_GEOMS
   cfg.events["base_com"].params["asset_cfg"].body_names = (_ROOT_BODY,)
 
-  # Same std-value philosophy as skandharobot, minus the arm/head entries (this
-  # robot has no arm or head joints to shape a posture reward for):
+  # Same std-value philosophy as skandharobot, minus the arm/head/waist entries
+  # (this robot has no arm, head, or waist joints to shape a posture reward for):
   # - Knees/hip_pitch get the loosest std to allow natural leg bending during stride.
   # - Hip roll/yaw stay tighter to prevent excessive lateral sway and keep gait stable.
   # - Ankle roll is very tight for balance; ankle pitch looser for foot clearance.
-  # - Waist stays tight to keep the torso/pelvis coupling stable (single-DOF here).
   # Running values are ~1.5-2x walking values to accommodate larger motion range.
   cfg.rewards["pose"].params["std_standing"] = {".*": 0.05}
   cfg.rewards["pose"].params["std_walking"] = {
@@ -105,8 +104,6 @@ def skandha_lower_body_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg
     r".*knee_pitch.*": 0.5,
     r".*ankle_pitch.*": 0.15,
     r".*ankle_roll.*": 0.1,
-    # Waist.
-    r".*waist.*": 0.15,
   }
   cfg.rewards["pose"].params["std_running"] = {
     # Legs.
@@ -116,8 +113,6 @@ def skandha_lower_body_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg
     r".*knee_pitch.*": 0.5,
     r".*ankle_pitch.*": 0.25,
     r".*ankle_roll.*": 0.1,
-    # Waist.
-    r".*waist.*": 0.25,
   }
 
   cfg.rewards["body_orientation_l2"].params["asset_cfg"].body_names = (_ROOT_BODY,)

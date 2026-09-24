@@ -4,7 +4,6 @@
     <joint armature="0.01" damping="0.05" frictionloss="0.2" />
   </default>
   <asset>
-    <mesh name="base_link" file="base_link.STL" />
     <mesh name="hip_link" file="hip_link.STL" />
     <mesh name="RL_link_1" file="RL_link_1.STL" />
     <mesh name="RL_link_2" file="RL_link_2.STL" />
@@ -28,7 +27,6 @@
     <mesh name="hip_left_site_imu" content_type="model/stl" file="hip_left_site_imu.STL" />
     <mesh name="hip_rear_site_imu" content_type="model/stl" file="hip_rear_site_imu.STL" />
     <mesh name="vectornav_hip_front_site_imu" content_type="model/stl" file="vectornav_hip_front_site_imu.STL" />
-    <mesh name="base_link_collision" file="collision_hulls/base_link.STL" />
     <mesh name="hip_link_collision" file="collision_hulls/hip_link.STL" />
     <mesh name="RL_link_1_collision" file="collision_hulls/RL_link_1.STL" />
     <mesh name="RL_link_2_collision" file="collision_hulls/RL_link_2.STL" />
@@ -54,17 +52,12 @@
     <mesh name="vectornav_hip_front_site_imu_collision" file="collision_hulls/vectornav_hip_front_site_imu.STL" />
   </asset>
   <worldbody>
-    <body name="base_link" pos="0 0 0.869244">
-      <inertial pos="-0.00481332 -0.00043642 0.263135" quat="1 0.000424804 0.000863188 0.00024888" mass="9.20601" diaginertia="0.174408 0.123624 0.0612694" />
+    <body name="hip_link" pos="0 0 0.8376126023910668" quat="0 1 0 0">
+      <inertial pos="-0.0510996 3.51326e-05 0.045365" quat="0.487076 0.487022 -0.512673 0.512575" mass="5.639" diaginertia="0.0113311 0.00998188 0.00428736" />
       <joint name="floating_base_joint" type="free" armature="0" damping="0" frictionloss="0" />
-      <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="base_link" contype="0" conaffinity="0" group="1" density="0" />
-      <geom name="base_link_collision" type="mesh" mesh="base_link_collision" group="3" rgba="0.792157 0.819608 0.933333 0" />
+      <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="hip_link" contype="0" conaffinity="0" group="1" density="0" />
+      <geom name="hip_link_collision" type="mesh" mesh="hip_link_collision" group="3" rgba="0.792157 0.819608 0.933333 0" />
       <site name="imu" pos="0 0 0" size="0.01" />
-      <body name="hip_link" pos="0 0 -0.0316317" quat="0 1 0 0">
-        <inertial pos="-0.0510996 3.51326e-05 0.045365" quat="0.487076 0.487022 -0.512673 0.512575" mass="5.639" diaginertia="0.0113311 0.00998188 0.00428736" />
-        <joint name="waist_joint" pos="0 0 0" axis="0 0 1" range="-2.96706 3.14159" actuatorfrcrange="-91 91" armature="0" damping="0" frictionloss="0" />
-        <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="hip_link" contype="0" conaffinity="0" group="1" density="0" />
-        <geom name="hip_link_collision" type="mesh" mesh="hip_link_collision" group="3" rgba="0.792157 0.819608 0.933333 0" />
         <body name="RL_link_1" pos="0.0694 0.13 0.078963">
           <inertial pos="-0.0670872 -2.25033e-06 -0.00156429" quat="1.34288e-08 0.715364 5.08641e-06 0.698752" mass="0.672983" diaginertia="0.000413813 0.000287553 0.000162962" />
           <joint name="hip_roll_r_joint" pos="0 0 0" axis="1 0 0" range="-0.819882 0.369248" actuatorfrcrange="-235 235" armature="0" damping="0" frictionloss="0" />
@@ -202,10 +195,8 @@
           <site name="vectornav_hip_front_site_imu_site" pos="0 0 0" />
         </body>
       </body>
-    </body>
   </worldbody>
   <sensor>
-    <jointpos name="waist_joint_pos" joint="waist_joint" />
     <jointpos name="hip_roll_r_joint_pos" joint="hip_roll_r_joint" />
     <jointpos name="hip_yaw_r_joint_pos" joint="hip_yaw_r_joint" />
     <jointpos name="hip_pitch_r_joint_pos" joint="hip_pitch_r_joint" />
@@ -218,7 +209,6 @@
     <jointpos name="knee_pitch_l_joint_pos" joint="knee_pitch_l_joint" />
     <jointpos name="ankle_pitch_l_joint_pos" joint="ankle_pitch_l_joint" />
     <jointpos name="ankle_roll_l_joint_pos" joint="ankle_roll_l_joint" />
-    <jointvel name="waist_joint_vel" joint="waist_joint" />
     <jointvel name="hip_roll_r_joint_vel" joint="hip_roll_r_joint" />
     <jointvel name="hip_yaw_r_joint_vel" joint="hip_yaw_r_joint" />
     <jointvel name="hip_pitch_r_joint_vel" joint="hip_pitch_r_joint" />
@@ -231,7 +221,6 @@
     <jointvel name="knee_pitch_l_joint_vel" joint="knee_pitch_l_joint" />
     <jointvel name="ankle_pitch_l_joint_vel" joint="ankle_pitch_l_joint" />
     <jointvel name="ankle_roll_l_joint_vel" joint="ankle_roll_l_joint" />
-    <jointactuatorfrc name="waist_joint_torque" joint="waist_joint" />
     <jointactuatorfrc name="hip_roll_r_joint_torque" joint="hip_roll_r_joint" />
     <jointactuatorfrc name="hip_yaw_r_joint_torque" joint="hip_yaw_r_joint" />
     <jointactuatorfrc name="hip_pitch_r_joint_torque" joint="hip_pitch_r_joint" />
@@ -252,7 +241,7 @@
     <gyro name="imu_ang_vel" site="imu" />
     <velocimeter name="imu_lin_vel" site="imu" />
     <accelerometer name="imu_lin_acc" site="imu" />
-    <subtreeangmom name="root_angmom" body="base_link" />
+    <subtreeangmom name="root_angmom" body="hip_link" />
   </sensor>
   <contact>
     <exclude body1="LL_foot_roll_link" body2="LL_link_4" />
